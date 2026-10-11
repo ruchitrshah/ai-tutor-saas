@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "AI Tutor",
+    "slug": "amity-student-portal",
+    "version": "0.1.0",
+    "orientation": "default",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#F8F9FA",
+    "web": { "bundler": "metro", "output": "single", "name": "AI Tutor" }
+  }
+}

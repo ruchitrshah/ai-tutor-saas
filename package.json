@@ -1,0 +1,31 @@
+{
+  "name": "ai-tutor-saas",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "web": "expo start --web",
+    "export": "expo export -p web --output-dir preview",
+    "build": "expo export --platform web --output-dir dist"
+  },
+  "dependencies": {
+    "@expo/metro-runtime": "~57.0.15",
+    "expo": "^57.0.22",
+    "expo-blur": "~57.0.3",
+    "expo-clipboard": "~57.0.2",
+    "expo-font": "~57.0.4",
+    "expo-haptics": "~57.0.3",
+    "expo-linear-gradient": "~57.0.2",
+    "expo-status-bar": "~57.0.1",
+    "lottie-web": "^5.13.0",
+    "lucide": "^1.52.0",
+    "lucide-react-native": "^1.45.0",
+    "morphicons": "^1.7.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-svg": "15.15.4",
+    "react-native-web": "^0.21.2"
+  }
+}
