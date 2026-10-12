@@ -8,7 +8,7 @@ export const REVISIONS = [
     course: 'Business Communication',
     code: 'BC107',
     week: 'Week 3',
-    accent: 'gray',
+    accent: 'blue',
     items: [
       { id: 'r-tenses', title: 'Tenses and agreement', count: 3, text: '3 mistakes in Essay structure, Tuesday', play: { subjectId: 'a', taskId: 'a1' } },
       { id: 'r-reader', title: 'Writing for the reader', count: 2, text: '2 mistakes in Email tone, Wednesday', play: { subjectId: 'a', taskId: 'a2' } },
@@ -20,7 +20,7 @@ export const REVISIONS = [
     course: 'Marketing Management',
     code: 'MK101',
     week: 'Week 3',
-    accent: 'gray',
+    accent: 'orange',
     items: [
       { id: 'r-mix', title: 'The marketing mix', count: 2, text: '2 mistakes in Case study: the new snack, Monday', play: { subjectId: 'b', taskId: 'b1' } },
       { id: 'r-segments', title: 'Segmentation', count: 1, text: '1 mistake in the Checkpoint quiz, Tuesday', play: { subjectId: 'b', taskId: 'b1' } },
@@ -31,7 +31,7 @@ export const REVISIONS = [
     course: 'Introduction to Programming',
     code: 'CS101',
     week: 'Week 3',
-    accent: 'gray',
+    accent: 'green',
     items: [
       { id: 'r-loops', title: 'Loops', count: 3, text: '3 mistakes in Loops basics, Wednesday', play: { subjectId: 'c', taskId: 'c1' } },
       { id: 'r-offbyone', title: 'Off-by-one errors', count: 2, text: '2 mistakes in the Debug lab, Thursday', play: { subjectId: 'c', taskId: 'c2' } },
@@ -42,7 +42,7 @@ export const REVISIONS = [
     course: 'Business Communication',
     code: 'BC107',
     week: 'Week 2',
-    accent: 'gray',
+    accent: 'purple',
     items: [
       { id: 'r-open', title: 'Opening a presentation', count: 6, text: '6 mistakes in Presentation basics, last Friday', play: { subjectId: 'a', taskId: 'a7' } },
       { id: 'r-resume', title: 'Reports and resumes', count: 3, text: '3 mistakes in Practice: multiple choice, last Monday', play: { subjectId: 'a', taskId: 'a8' } },
