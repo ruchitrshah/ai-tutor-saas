@@ -1,4 +1,4 @@
-// A flat button. A bright face, a 10px radius, no 3D lip: it should not look like a key
+// A flat button. A bright face, a 6px radius, no 3D lip: it should not look like a key
 // you push down. What tells you it is live is feedback, not decoration:
 //   hover  a slight dim of the fill (no glow)
 //   press  a 3% shrink (instant, ease-out) that springs back on release
@@ -29,7 +29,7 @@ export default function Button({
   title,
   onPress,
   variant: asked = 'primary',
-  size = 'md', // kept for call sites; every button is the same height
+  size = 'md', // md: 36 tall, the same height as a chip (default) · lg: 48 tall, for a standalone call to action
   disabled = false,
   loading = false,
   haptic = 'light',
@@ -86,6 +86,8 @@ export default function Button({
 
   const faceStyle = [
     styles.face,
+    size === 'lg' ? styles.faceLg : styles.faceMd,
+    size === 'lg' ? null : variant === 'ghost' && styles.ghostMd,
     { backgroundColor: tokens.background, borderColor: tokens.border },
     variant === 'outline' && styles.outline,
     variant === 'ghost' && styles.ghost,
@@ -94,7 +96,7 @@ export default function Button({
     live && !reduced && variant !== 'ghost' && { transform: [{ scale: press.interpolate({ inputRange: [0, 1], outputRange: [1, 0.97] }) }] },
   ];
 
-  const textStyle = [styles.text, { color: labelColor || tokens.foreground }];
+  const textStyle = [styles.text, size === 'lg' ? styles.textLg : styles.textMd, { color: labelColor || tokens.foreground }];
   const idleOpacity = morph.interpolate({ inputRange: [0, 0.45], outputRange: [1, 0], extrapolate: 'clamp' });
   const idleScale = morph.interpolate({ inputRange: [0, 1], outputRange: reduced ? [1, 1] : [1, 0.88], extrapolate: 'clamp' });
   const inOpacity = morph.interpolate({ inputRange: [0.35, 1], outputRange: [0, 1], extrapolate: 'clamp' });
@@ -141,16 +143,19 @@ export default function Button({
 const styles = StyleSheet.create({
   wrap: { borderRadius: Radii.button.default },
   face: {
-    minHeight: CONTROL,
-    paddingVertical: Space[10],
-    paddingHorizontal: Space[24],
     borderRadius: Radii.button.default,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 0,
   },
+  // Sizes. md matches a chip (36); lg is the old full-height button (48).
+  faceMd: { minHeight: 36, paddingVertical: Space[6], paddingHorizontal: Space[16] },
+  faceLg: { minHeight: CONTROL, paddingVertical: Space[10], paddingHorizontal: Space[24] },
   outline: { borderWidth: 2 },
   ghost: { backgroundColor: 'transparent', paddingHorizontal: Space[12] },
+  ghostMd: { paddingHorizontal: Space[8] },
   center: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Space[8] },
-  text: { fontFamily: FontFamilies.demi, fontSize: fs(16), lineHeight: lh(22), letterSpacing: 0.2 },
+  text: { fontFamily: FontFamilies.demi, letterSpacing: 0.2 },
+  textMd: { fontSize: fs(15), lineHeight: lh(20) },
+  textLg: { fontSize: fs(16), lineHeight: lh(22) },
 });
