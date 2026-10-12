@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   clear: { width: 36, height: 36, borderRadius: Radii.control.sm, alignItems: 'center', justifyContent: 'center' },
   list: { paddingVertical: Space[8] },
   // A name line and a subtext line: every row is the same height.
-  row: { flexDirection: 'row', alignItems: 'center', gap: Space[12], minHeight: 88, paddingVertical: Space[20], paddingLeft: Space[16], paddingRight: Space[8], ...Platform.select({ web: { transitionProperty: 'background-color', transitionDuration: '140ms' } }) },
+  row: { flexDirection: 'row', alignItems: 'center', gap: Space[12], minHeight: 79, paddingVertical: 18, paddingLeft: Space[16], paddingRight: Space[8], ...Platform.select({ web: { transitionProperty: 'background-color', transitionDuration: '140ms' } }) },
   main: { flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: Space[12], minHeight: 48, ...Platform.select({ web: { cursor: 'pointer' } }) },
   text: { flex: 1, minWidth: 0, gap: 2 },
   nameRow: { flexDirection: 'row', alignItems: 'baseline' },
