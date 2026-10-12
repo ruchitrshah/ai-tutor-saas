@@ -21,7 +21,7 @@ import { usePortal } from '../store/portal';
 import { titleCase } from './text';
 import { greeting, onCodeFixed, onCorrect, onWrong, recap, reply, startChips } from '../tutor/engine';
 import { SUB, TITLE } from '../theme/type';
-import Mascot, { MASCOTS } from './Mascot';
+import TutorAvatar from './TutorAvatar';
 import Breathe from './Breathe';
 import Button from '../components/Button';
 import { ArrowRight, ArrowUp, Check, Heart, MessageCircle, Mic, MorphIcon, Search, data } from './icons';
@@ -464,38 +464,25 @@ function Bubble({ m, animate }) {
   );
 }
 
-// The tutor's name (the character the student picked) over a short line that changes
-// every few seconds: an invitation, not a status. Real states (Listening, Thinking,
-// Off during the quiz) replace it while they last, and are announced politely.
-// The line swaps with a quick lift-and-fade (old out fast, new in a touch slower), and
-// holds still under reduced motion, because text that changes by itself needs a stop.
+// The tutor's name over a short resting line (an invitation, not a status). Real states
+// (Listening, Thinking, Off during the quiz) replace it while they last, and are announced
+// politely. The line swaps with a quick lift-and-fade (old out fast, new in a touch slower).
 const NUDGES = {
   en: ['Need a hand?', 'What are you thinking?', 'Let me help', 'Be curious', 'You can do it', 'Take your time'],
   hi: ['Haath chahiye?', 'Kya soch rahe ho?', 'Main hoon na', 'Curious raho', 'Tum kar loge', 'Aaram se karo'],
 };
 
-// Order matches NUDGES: wave · tilt · offer · curious · pump · calm.
-const NUDGE_GESTURE = ['wave', 'tilt', 'offer', 'curious', 'pump', 'calm'];
-
 function TutorHeading({ status, mood = 'idle', reaction = null, compact = false }) {
-  const { mascot, lang } = usePortal();
+  const { lang } = usePortal();
   const reduced = useReducedMotion();
-  const name = (MASCOTS.find((m) => m.key === mascot) || MASCOTS[0]).name;
-  const pool = NUDGES[lang] || NUDGES.en;
-  const [i, setI] = useState(0);
-  const line = status || pool[i % pool.length];
+  const name = 'AI Tutor';
+  // Resting line: the first invitation, held still. Real states replace it while they last.
+  const line = status || (NUDGES[lang] || NUDGES.en)[0];
   const v = useRef(new Animated.Value(1)).current;
   const y = useRef(new Animated.Value(0)).current;
   const first = useRef(true);
   const shown = useRef(line);
   const [text, setText] = useState(line);
-
-  // Advance the line on a timer, only while there is no real status to show.
-  useEffect(() => {
-    if (status || reduced) return undefined;
-    const t = setInterval(() => setI((n) => n + 1), 4200);
-    return () => clearInterval(t);
-  }, [status, reduced]);
 
   // Swap: out (140ms), change the words, in (240ms). Ease-out both ways.
   useEffect(() => {
@@ -522,22 +509,10 @@ function TutorHeading({ status, mood = 'idle', reaction = null, compact = false 
     return () => { alive = false; clearTimeout(guard); };
   }, [line, reduced, v, y]);
 
-  // Each line has a gesture that belongs to it; a real reaction (right, wrong) wins.
-  const [gest, setGest] = useState(null);
-  const count = useRef(0);
-  useEffect(() => {
-    if (status) return;
-    count.current += 1;
-    setGest({ name: NUDGE_GESTURE[i % NUDGE_GESTURE.length], id: count.current });
-  }, [i, status]);
-  useEffect(() => {
-    if (reaction) { count.current += 1; setGest({ name: reaction.name, id: count.current }); }
-  }, [reaction]);
-
   return (
     <>
-    <View style={{ height: compact ? 48 : 60, justifyContent: 'center' }}>
-      <Mascot head live size={compact ? 44 : 60} mood={mood} gesture={gest} />
+    <View style={{ height: 48, justifyContent: 'center' }}>
+      <TutorAvatar size={compact ? 40 : 44} />
     </View>
     <View style={styles.headText}>
       <Text style={styles.tutorName} numberOfLines={1}>{name}</Text>
@@ -557,7 +532,7 @@ function TutorHeading({ status, mood = 'idle', reaction = null, compact = false 
 
 // The small avatar beside a tutor bubble: the chosen character, still.
 function Orb() {
-  return <Mascot head size={36} />;
+  return <TutorAvatar size={32} />;
 }
 
 // Words arrive one after another once the bubble is no longer `hidden`. Unrevealed

@@ -398,7 +398,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 64,
     height: 44,
-    borderRadius: 22,
+    borderRadius: 13,
     backgroundColor: 'rgba(16,24,40,0.07)',
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: 'rgba(255,255,255,0.8)',
@@ -406,7 +406,7 @@ const styles = StyleSheet.create({
   tabIconWrap: { position: 'relative', width: 32, height: 32, alignItems: 'center', justifyContent: 'center' },
   tabBadge: {
     position: 'absolute', top: -6, right: -10,
-    minWidth: 24, height: 24, borderRadius: 20,
+    minWidth: 24, height: 24, borderRadius: 12,
     backgroundColor: Colors.brand.primary,
     alignItems: 'center', justifyContent: 'center',
   },

@@ -9,7 +9,6 @@ import { USER, usePortal } from '../store/portal';
 import { SUB, TITLE } from '../theme/type';
 import Dropdown from '../ui/Dropdown';
 import GradesSheet from '../ui/GradesSheet';
-import Mascot, { MASCOTS, MASCOT_TONE } from '../ui/Mascot';
 import Reveal from '../ui/Reveal';
 import Shell, { Panel } from '../ui/Shell';
 import { fs, lh } from '../theme/fluid';
@@ -26,22 +25,19 @@ function Stub({ active, title, sub, children }) {
 }
 
 export function Profile() {
-  const { signOut, mascot, setMascot, done, stats } = usePortal();
+  const { signOut, done, stats } = usePortal();
   const doneCount = Object.keys(done || {}).filter((k) => done[k]).length;
   // "MBA Semester 1" reads better as two small tags.
   const m = /^(.*?)\s+(Semester\s+\d+)$/i.exec(USER.program || '');
   const programme = m ? [m[1], m[2]] : [USER.program].filter(Boolean);
   const [grades, setGrades] = useState(false);
-  const { width } = useWindowDimensions();
-  const cols = width < 560 ? '45%' : '22%';
+  const initials = (USER.name || '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('');
   return (
     <Shell active="profile">
       <View style={styles.stack}>
         <Reveal delay={40}>
           <View style={styles.banner}>
-            <View style={[styles.bannerArt, { backgroundColor: Colors.accent[MASCOT_TONE[mascot] || 'blue'].soft }]}>
-              <Mascot head live kind={mascot || 'cactus'} size={Math.min(240, Math.max(170, width * 0.28))} gesture={{ name: 'wave', id: 1 }} />
-            </View>
+            <View style={styles.avatar}><Text style={styles.avatarText}>{initials}</Text></View>
             <View style={styles.identity}>
               <Text style={styles.name}>{USER.name}</Text>
               <Text style={styles.email}>{USER.email}</Text>
@@ -56,30 +52,6 @@ export function Profile() {
             </View>
             <Button title="See Your Grades" variant="outline" onPress={() => setGrades(true)} style={styles.gradesBtn} />
           </View>
-        </Reveal>
-
-        <Reveal delay={80}>
-          <Panel title="Your Tutor">
-            <Text style={SUB}>Choose your tutor.</Text>
-            <View style={styles.grid} accessibilityRole="radiogroup">
-              {MASCOTS.map((m) => {
-                const on = (mascot || 'cactus') === m.key;
-                return (
-                  <Pressable
-                    key={m.key}
-                    onPress={() => setMascot(m.key)}
-                    accessibilityRole="radio"
-                    accessibilityState={{ selected: on, checked: on }}
-                    accessibilityLabel={m.name}
-                    style={({ hovered, pressed }) => [styles.pick, { flexBasis: cols }, on && styles.pickOn, !on && hovered && { backgroundColor: Colors.surface.raised }, pressed && { transform: [{ scale: 0.97 }] }]}
-                  >
-                    <View style={styles.pickArt}><Mascot head kind={m.key} size={84} /></View>
-                    <Text style={[styles.pickName, on && { color: Colors.text.accent }]}>{m.name}</Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </Panel>
         </Reveal>
 
         <Reveal delay={120}>
@@ -131,7 +103,8 @@ function Stat({ n, label }) {
 const styles = StyleSheet.create({
   stack: { gap: Space[24] },
   banner: { gap: Space[20] },
-  bannerArt: { height: 220, borderRadius: 24, alignItems: 'center', justifyContent: 'flex-end', overflow: 'hidden' },
+  avatar: { width: 88, height: 88, borderRadius: 44, backgroundColor: Colors.accent.blue.soft, alignItems: 'center', justifyContent: 'center' },
+  avatarText: { fontFamily: FontFamilies.heavy, fontSize: fs(26), lineHeight: lh(32), color: Colors.accent.blue.text },
   identity: { gap: Space[4] },
   name: { fontFamily: FontFamilies.heavy, fontSize: Platform.select({ web: 'clamp(26px, 1.2vw + 20px, 34px)', default: 28 }), lineHeight: Platform.select({ web: 'clamp(32px, 1.3vw + 24px, 40px)', default: 34 }), letterSpacing: -0.4, color: Colors.text.primary },
   email: { fontFamily: FontFamilies.medium, fontSize: fs(17), lineHeight: lh(24), color: Colors.text.secondary },
@@ -145,10 +118,5 @@ const styles = StyleSheet.create({
   statN: { fontFamily: FontFamilies.heavy, fontSize: fs(26), lineHeight: lh(32), color: Colors.text.primary },
   statL: { fontFamily: FontFamilies.medium, fontSize: fs(15), color: Colors.text.secondary },
   themeRow: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: Space[16] },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: Space[12] },
-  pickArt: { height: 92, justifyContent: 'flex-end', alignItems: 'center' },
-  pick: { flexBasis: '22%', flexGrow: 1, alignItems: 'center', gap: Space[8], paddingVertical: Space[16], paddingHorizontal: Space[12], borderRadius: 14, borderWidth: 2, borderColor: Colors.border.subtle, backgroundColor: Colors.surface.card },
-  pickOn: { borderColor: Colors.brand.primary, backgroundColor: Colors.brand.soft },
-  pickName: { fontFamily: FontFamilies.demi, fontSize: fs(16), color: Colors.text.primary },
   signout: { alignSelf: 'flex-start', minWidth: 160 },
 });

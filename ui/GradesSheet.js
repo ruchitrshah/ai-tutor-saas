@@ -7,10 +7,8 @@ import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { Colors, FontFamilies, Radii, Space } from '../brand';
 import ProgressBar from '../components/ProgressBar';
 import { SUBJECTS } from '../data/courses';
-import { usePortal } from '../store/portal';
 import { TITLE } from '../theme/type';
 import { SUBJECT_STYLE } from '../ui/kinds';
-import Mascot, { MASCOT_TONE } from '../ui/Mascot';
 import Sheet from '../ui/Sheet';
 import { fs, lh } from '../theme/fluid';
 
@@ -22,7 +20,6 @@ function courseScore(s) {
 }
 
 export default function GradesSheet({ open, onClose }) {
-  const { mascot } = usePortal();
   const phone = useWindowDimensions().width < 640;
   const scores = SUBJECTS.map(courseScore).filter((x) => x != null);
   const average = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
@@ -32,15 +29,11 @@ export default function GradesSheet({ open, onClose }) {
   return (
     <Sheet open={open} onClose={onClose} title="Your grades" width={640} tall>
       <View style={styles.stack}>
-                  <View style={[styles.art, { backgroundColor: Colors.accent[MASCOT_TONE[mascot] || 'blue'].soft }]}>
-            <Mascot head live kind={mascot || 'cactus'} size={140} gesture={{ name: 'cheer', id: 1 }} />
-          </View>
-
-                  <View style={[styles.tiles, phone && { gap: Space[8] }]}>
-            <Tile phone={phone} n={average == null ? '–' : `${average}%`} label="Average so far" />
-            <Tile phone={phone} n={graded} label="Graded" />
-            <Tile phone={phone} n={all.length - graded} label="Still to come" />
-          </View>
+        <View style={[styles.tiles, phone && { gap: Space[8] }]}>
+          <Tile phone={phone} n={average == null ? '–' : `${average}%`} label="Average so far" />
+          <Tile phone={phone} n={graded} label="Graded" />
+          <Tile phone={phone} n={all.length - graded} label="Still to come" />
+        </View>
 
         {SUBJECTS.map((s) => {
           const score = courseScore(s);
@@ -51,7 +44,7 @@ export default function GradesSheet({ open, onClose }) {
                   <Text style={TITLE} numberOfLines={1}>{s.name}</Text>
                   <Text style={styles.score}>{score == null ? 'Not graded yet' : `${score}%`}</Text>
                 </View>
-                <ProgressBar currentStep={score == null ? 0 : score / 100} totalSteps={1} sparkle={false} shine height={16} fillColor={accent.solid} />
+                <ProgressBar currentStep={score == null ? 0 : score / 100} totalSteps={1} sparkle={false} height={8} fillColor={Colors.brand.primary} />
                 <View style={styles.rows}>
                   {s.grading.map((g) => (
                     <View key={g.label} style={styles.row}>
@@ -80,7 +73,6 @@ function Tile({ n, label, phone }) {
 
 const styles = StyleSheet.create({
   stack: { gap: Space[24] },
-  art: { height: 160, borderRadius: 24, alignItems: 'center', justifyContent: 'flex-end', overflow: 'hidden' },
   tiles: { flexDirection: 'row', gap: Space[12] },
   tile: { flex: 1, minWidth: 0, gap: 2, padding: Space[16], borderRadius: Radii.card.default, backgroundColor: Colors.surface.raised },
   tileN: { fontFamily: FontFamilies.heavy, fontSize: fs(26), lineHeight: lh(32), color: Colors.text.primary },

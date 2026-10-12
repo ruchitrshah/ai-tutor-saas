@@ -18,7 +18,6 @@ import { findSubject } from '../data/courses';
 import { usePortal } from '../store/portal';
 import { PAGE_TITLE, SUB, TITLE } from '../theme/type';
 import Breathe, { Halo } from '../ui/Breathe';
-import Confetti from '../ui/Confetti';
 import InView from '../ui/InView';
 import { dueInfo } from '../ui/due';
 import Reveal from '../ui/Reveal';
@@ -53,7 +52,6 @@ export default function Subject() {
 
   const header = (
     <View style={styles.head}>
-      {subjectDone ? <Confetti count={24} radius={170} delay={250} /> : null}
       <Pressable
         onPress={() => go('homework')}
         accessibilityRole="button"

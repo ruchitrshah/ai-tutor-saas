@@ -6,7 +6,6 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Colors, FontFamilies, Space } from '../brand';
 import { SUB, TITLE } from '../theme/type';
-import Mascot from './Mascot';
 import Sheet from './Sheet';
 
 export function LearnLink({ onPress, label = 'Learn more' }) {
@@ -32,7 +31,6 @@ export default function Explainer({ open, onClose, title, points }) {
     <Sheet open={open} onClose={onClose} title={title} width={560}>
       {points.map((p) => (
         <View key={p.title} style={styles.point}>
-          <View style={styles.face}><Mascot head kind={p.mascot} size={64} /></View>
           <View style={styles.pointText}>
             <Text style={TITLE}>{p.title}</Text>
             <Text style={SUB}>{p.body}</Text>
@@ -50,6 +48,5 @@ const styles = StyleSheet.create({
   link: { ...SUB, color: Colors.text.link, textDecorationLine: 'underline' },
   linkHover: { color: Colors.text.accent, textDecorationLine: 'none' },
   point: { flexDirection: 'row', alignItems: 'center', gap: Space[16] },
-  face: { width: 72, height: 72, borderRadius: 20, backgroundColor: Colors.surface.raised, alignItems: 'center', justifyContent: 'flex-end', overflow: 'hidden' },
   pointText: { flex: 1, minWidth: 0, gap: Space[4] },
 });

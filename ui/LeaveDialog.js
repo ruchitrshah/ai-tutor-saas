@@ -12,7 +12,6 @@ import { Animated, Platform, Pressable, StyleSheet, Text, View } from 'react-nat
 import { Colors, FontFamilies, Motion, Radii, Space, useReducedMotion } from '../brand';
 import Button from '../components/Button';
 import { SUB } from '../theme/type';
-import Mascot from './Mascot';
 import { fs, lh } from '../theme/fluid';
 
 export default function LeaveDialog({ open, hintsLeft, onStay, onHint, onLeave, exam = false }) {
@@ -20,17 +19,12 @@ export default function LeaveDialog({ open, hintsLeft, onStay, onHint, onLeave, 
   const native = Platform.OS !== 'web';
   const [mounted, setMounted] = useState(false);
   const v = useRef(new Animated.Value(0)).current;
-  const peek = useRef(new Animated.Value(0)).current;
   const panel = useRef(null);
 
   useEffect(() => {
     if (open) {
       setMounted(true);
-      peek.setValue(0);
-      Animated.parallel([
-        Animated.timing(v, { toValue: 1, duration: reduced ? 100 : 220, easing: Motion.ease.out, useNativeDriver: native }),
-        Animated.timing(peek, { toValue: 1, duration: reduced ? 100 : 320, delay: reduced ? 0 : 90, easing: Motion.ease.out, useNativeDriver: native }),
-      ]).start();
+      Animated.timing(v, { toValue: 1, duration: reduced ? 100 : 220, easing: Motion.ease.out, useNativeDriver: native }).start();
       const t = setTimeout(() => {
         const first = panel.current && panel.current.querySelector && panel.current.querySelector('button');
         if (first) first.focus(); else panel.current && panel.current.focus && panel.current.focus();
@@ -40,7 +34,7 @@ export default function LeaveDialog({ open, hintsLeft, onStay, onHint, onLeave, 
     Animated.timing(v, { toValue: 0, duration: reduced ? 80 : 140, easing: Motion.ease.out, useNativeDriver: native }).start();
     const gone = setTimeout(() => setMounted(false), reduced ? 90 : 160);
     return () => clearTimeout(gone);
-  }, [open, reduced, v, peek, native]);
+  }, [open, reduced, v, native]);
 
   useEffect(() => {
     if (native || !open) return undefined;
@@ -70,11 +64,6 @@ export default function LeaveDialog({ open, hintsLeft, onStay, onHint, onLeave, 
       <Animated.View
         style={[styles.stack, { opacity: v, transform: reduced ? [] : [{ translateY: v.interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) }, { scale: v.interpolate({ inputRange: [0, 1], outputRange: [0.97, 1] }) }] }]}
       >
-        {/* The tutor, outside the panel, over its top edge. */}
-        <Animated.View style={[styles.mascot, { transform: [{ translateY: peek.interpolate({ inputRange: [0, 1], outputRange: [26, 0] }) }] }]}>
-          <Mascot head live size={120} mood="sad" />
-        </Animated.View>
-
         <View ref={panel} tabIndex={-1} role="alertdialog" aria-modal="true" aria-label={exam ? "Leave this exam?" : "Skip this activity?"} style={styles.panel}>
           <Text style={styles.title}>{exam ? 'Leave this exam?' : 'Skip this activity?'}</Text>
           <Text style={[SUB, styles.text]}>{line}</Text>
@@ -92,7 +81,6 @@ export default function LeaveDialog({ open, hintsLeft, onStay, onHint, onLeave, 
 const styles = StyleSheet.create({
   layer: { ...Platform.select({ web: { position: 'fixed' }, default: { position: 'absolute' } }), top: 0, left: 0, right: 0, bottom: 0, zIndex: 120, alignItems: 'center', justifyContent: 'center', padding: Space[24] },
   stack: { width: '100%', maxWidth: 440, alignItems: 'center' },
-  mascot: { zIndex: 1, marginBottom: -Space[4] },
   panel: {
     zIndex: 2,
     alignSelf: 'stretch',

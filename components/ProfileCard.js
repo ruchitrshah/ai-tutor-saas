@@ -180,7 +180,7 @@ export default function ProfileCard({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.surface.card ?? Colors.surface.subtle,
-    borderRadius: 20,
+    borderRadius: 12,
     overflow: 'hidden',
     marginBottom: s(Space[16]),
     borderWidth: 1,
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.surface.subtle,
-    borderRadius: 16,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: Colors.border.subtle,
     marginBottom: s(Space[16]),

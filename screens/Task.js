@@ -13,13 +13,12 @@ import { SKILL_OF, findSubject, findTask } from '../data/courses';
 import { usePortal } from '../store/portal';
 import { recap } from '../tutor/engine';
 import { SUB, TITLE } from '../theme/type';
-import Confetti from '../ui/Confetti';
 import { KIND, SKILL_STYLE } from '../ui/kinds';
 import Reveal from '../ui/Reveal';
 import Shell, { cardBox } from '../ui/Shell';
 import TutorDock, { Beats, MAX_HINTS, TutorRecap } from '../ui/TutorDock';
 import LeaveDialog from '../ui/LeaveDialog';
-import Mascot, { MASCOTS } from '../ui/Mascot';
+import TutorAvatar from '../ui/TutorAvatar';
 import { fs, lh } from '../theme/fluid';
 
 export default function Task() {
@@ -80,10 +79,8 @@ export default function Task() {
 }
 
 // ── Completion ────────────────────────────────────────────────────────────────
-// The one moment that earns a full celebration. In order: the coin pops with two rings
-// rippling out and a burst of confetti; the tutor's line; three numbers counting up;
-// the skill this trained filling to its new level; then the way on. ~1.4s end to end,
-// and every step is skippable by just pressing the button.
+// A calm finish: a check, the tutor's line, three numbers, the skill this trained, then
+// the way on. Every step is skippable by just pressing the button.
 function Complete({ task, finished, name, backLabel, onDone }) {
   const reduced = useReducedMotion();
   const { stats, skill } = finished;
@@ -97,18 +94,15 @@ function Complete({ task, finished, name, backLabel, onDone }) {
   return (
     <View style={styles.complete}>
       <View style={styles.medalWrap}>
-        <Confetti count={22} radius={150} delay={180} />
-        <Ring delay={120} />
-        <Ring delay={380} />
-        <Reveal y={6} scaleFrom={0.6} duration={460}>
+        <Reveal y={6} scaleFrom={0.9} duration={260}>
           <View style={styles.medal}>
-            <Check size={44} color={Colors.ink} strokeWidth={3.4} />
+            <Check size={36} color={Colors.accent.blue.text} strokeWidth={2.8} />
           </View>
         </Reveal>
       </View>
 
       <Reveal delay={260}>
-        <Text style={[TITLE, styles.centerText]}>Nicely done, {name}!</Text>
+        <Text style={[TITLE, styles.centerText]}>Task complete</Text>
       </Reveal>
       {/* One line under the title; the task's name is already in the header. */}
       <Reveal delay={320}>
@@ -139,23 +133,6 @@ function Complete({ task, finished, name, backLabel, onDone }) {
         <Button title={backLabel} onPress={onDone} style={styles.cta} />
       </Reveal>
     </View>
-  );
-}
-
-// A ring that swells out from the coin and fades: "something landed".
-function Ring({ delay }) {
-  const reduced = useReducedMotion();
-  const v = useRef(new Animated.Value(0)).current;
-  useEffect(() => {
-    if (reduced) return;
-    Animated.timing(v, { toValue: 1, duration: 900, delay, easing: Motion.ease.out, useNativeDriver: Platform.OS !== 'web' }).start();
-  }, [reduced, v, delay]);
-  if (reduced) return null;
-  return (
-    <Animated.View
-      pointerEvents="none"
-      style={[styles.ring, { opacity: v.interpolate({ inputRange: [0, 0.15, 1], outputRange: [0, 0.55, 0] }), transform: [{ scale: v.interpolate({ inputRange: [0, 1], outputRange: [0.8, 2.1] }) }] }]}
-    />
   );
 }
 
@@ -194,7 +171,7 @@ function SkillGain({ skill }) {
         <Text style={TITLE}>{label}</Text>
         <Text style={[SUB, { color: accent.text }]}>+{Math.round((skill.after - skill.before) * 100)}%</Text>
       </View>
-      <ProgressBar currentStep={val} totalSteps={1} sparkle shine height={16} fillColor={accent.solid} />
+      <ProgressBar currentStep={val} totalSteps={1} sparkle={false} height={16} fillColor={Colors.brand.primary} />
     </View>
   );
 }
@@ -211,22 +188,6 @@ function PopOnce({ children }) {
     ]).start();
   }, [reduced, v]);
   return <Animated.View style={{ transform: [{ scale: v.interpolate({ inputRange: [0, 1], outputRange: [1, 1.03] }) }] }}>{children}</Animated.View>;
-}
-
-// "3 in a row": appears with a spring, only from the second in a row.
-function StreakPill({ n }) {
-  const reduced = useReducedMotion();
-  const v = useRef(new Animated.Value(reduced ? 1 : 0)).current;
-  useEffect(() => {
-    if (reduced) return;
-    Animated.spring(v, { toValue: 1, ...Motion.spring.pop, delay: 140, useNativeDriver: Platform.OS !== 'web' }).start();
-  }, [reduced, v]);
-  const c = Colors.accent.orange;
-  return (
-    <Animated.View style={[styles.streak, { backgroundColor: c.soft, borderColor: c.solid, opacity: v, transform: [{ scale: v.interpolate({ inputRange: [0, 1], outputRange: [0.8, 1] }) }] }]}>
-      <Text style={[styles.streakText, { color: c.text }]}>{n} in a row</Text>
-    </Animated.View>
-  );
 }
 
 // ── Frame ─────────────────────────────────────────────────────────────────────
@@ -312,15 +273,19 @@ export function Page({ kind, onClose, step, total, rail, leave, headerRight, con
         <X size={22} color={Colors.icon.secondary} strokeWidth={2.4} />
       </Pressable>
       {continuous ? (
-        <ProgressBar currentStep={Math.min(1, step / Math.max(total, 1))} totalSteps={1} height={16} fillColor={Colors.progress.fill} style={styles.progress} />
+        <ProgressBar currentStep={Math.min(1, step / Math.max(total, 1))} totalSteps={1} sparkle={false} height={12} fillColor={Colors.brand.primary} style={styles.progress} />
       ) : (
-        <ProgressBar currentStep={step} totalSteps={Math.max(total, 1)} sparkle shine height={16} gap={6} fillColor={Colors.progress.fill} style={styles.progress} />
+        <ProgressBar currentStep={step} totalSteps={Math.max(total, 1)} sparkle={false} height={12} gap={6} fillColor={Colors.brand.primary} style={styles.progress} />
       )}
       {headerRight}
       {phone && rail ? (
-        <Pressable onPress={openTutor} accessibilityRole="button" accessibilityLabel={unread ? 'Open your tutor, new message' : 'Open your tutor'} style={({ hovered, pressed }) => [styles.tutorBtn, (hovered || pressed) && { backgroundColor: Colors.surface.raised }]}>
-          <Mascot head size={36} />
-          {unread ? <View style={styles.unread} /> : null}
+        <Pressable onPress={openTutor} accessibilityRole="button" accessibilityLabel={unread ? 'Open your tutor, new message' : 'Open your tutor'} style={({ pressed }) => [styles.tutorBtn, pressed && { transform: [{ scale: 0.95 }] }]}>
+          {({ hovered }) => (
+            <>
+              <TutorAvatar size={36} hovered={hovered} />
+              {unread ? <View style={styles.unread} /> : null}
+            </>
+          )}
         </Pressable>
       ) : null}
     </View>
@@ -531,7 +496,6 @@ function Mcq({ task, onClose, onFinish }) {
               <View style={{ position: 'relative' }}>
                 {/* The right answer pops and bursts; nothing else moves. */}
                 {right ? <PopOnce>{tile}</PopOnce> : tile}
-                {right ? <Confetti count={12} radius={90} delay={60} /> : null}
               </View>
             </Reveal>
           );
@@ -548,7 +512,6 @@ function Mcq({ task, onClose, onFinish }) {
               <Text style={[TITLE, { color: Colors.status.successText }]} accessibilityRole="alert" accessibilityLiveRegion="polite">
                 {breakthrough ? 'Breakthrough' : 'Correct'}
               </Text>
-              {streak >= 2 ? <StreakPill n={streak} /> : null}
             </Reveal>
             <Button title={i + 1 < items.length ? 'Next Question' : 'Finish'} onPress={next} style={styles.action} />
           </>
@@ -583,7 +546,6 @@ function Footer({ right, breakthrough, streak, last, onNext, missNote, missTick,
             <Text style={[TITLE, { color: Colors.status.successText }]} accessibilityRole="alert" accessibilityLiveRegion="polite">
               {breakthrough ? 'Breakthrough' : 'Correct'}
             </Text>
-            {streak >= 2 ? <StreakPill n={streak} /> : null}
           </Reveal>
           <Button title={last ? 'Finish' : 'Next Question'} onPress={onNext} style={styles.action} />
         </>
@@ -1276,7 +1238,7 @@ function highlight(line) {
 
 // ── Code lab ──────────────────────────────────────────────────────────────────
 function Code({ task, onClose, onFinish }) {
-  const { recordAnswer, mascot } = usePortal();
+  const { recordAnswer } = usePortal();
   const tutorUI = React.useContext(TutorUI);
   const dock = useRef(null);
   const [code, setCode] = useState(task.starter);
@@ -1285,7 +1247,7 @@ function Code({ task, onClose, onFinish }) {
   const [focus, setFocus] = useState(false);
   const fixed = FIXED.test(code);
   const solved = out === task.expected;
-  const name = (MASCOTS.find((m) => m.key === mascot) || MASCOTS[0]).name;
+  const name = 'AI Tutor';
   const lines = code.split('\n');
   const rows = Math.max(lines.length, 8);
 
@@ -1359,7 +1321,6 @@ function Code({ task, onClose, onFinish }) {
         </View>
 
         <View style={[styles.edOut, { position: 'relative' }]}>
-          {solved ? <Confetti count={14} radius={110} delay={0} /> : null}
           <View style={[styles.dot, { backgroundColor: out == null ? ED.gutter : solved ? ED.ok : ED.bad }]} />
           <Text style={[styles.outText, solved && { color: ED.ok }, out != null && !solved && { color: ED.bad }]} accessibilityLiveRegion="polite">
             {out == null ? 'Run the code to see what it prints.' : solved ? out : `${out}  (expected ${task.expected})`}
@@ -1393,10 +1354,10 @@ const styles = StyleSheet.create({
   footDock: { ...Platform.select({ web: { position: 'fixed' }, default: { position: 'absolute' } }), bottom: 0, zIndex: 8, backgroundColor: Colors.surface.page, borderTopWidth: 2, borderTopColor: Colors.border.hairline },
   footInner: { width: '100%', maxWidth: 800, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', gap: Space[12], paddingVertical: Space[12], minHeight: 72 },
   snackWrap: { position: 'absolute', left: 0, right: 0, bottom: '100%', marginBottom: Space[12], paddingHorizontal: Space[16] },
-  snack: { flexDirection: 'row', alignItems: 'center', gap: Space[12], paddingLeft: Space[16], paddingRight: Space[8], paddingVertical: Space[14], minHeight: 56, borderRadius: 14, backgroundColor: '#26343B' },
+  snack: { flexDirection: 'row', alignItems: 'center', gap: Space[12], paddingLeft: Space[16], paddingRight: Space[8], paddingVertical: Space[14], minHeight: 56, borderRadius: 8, backgroundColor: '#26343B' },
   snackIcon: { width: 24, height: 24, flexShrink: 0, borderRadius: 12, backgroundColor: Colors.status.dangerFill, alignItems: 'center', justifyContent: 'center' },
   snackText: { flex: 1, fontFamily: FontFamilies.medium, fontSize: fs(16), lineHeight: lh(22), color: '#FFFFFF' },
-  snackX: { width: 36, height: 36, borderRadius: 10, alignItems: 'center', justifyContent: 'center', alignSelf: 'center' },
+  snackX: { width: 36, height: 36, borderRadius: 6, alignItems: 'center', justifyContent: 'center', alignSelf: 'center' },
   tutorBtn: { width: 48, height: 48, marginLeft: Space[8], borderRadius: Radii.control.md, alignItems: 'center', justifyContent: 'center' },
   unread: { position: 'absolute', top: 6, right: 6, width: 12, height: 12, borderRadius: 6, backgroundColor: Colors.status.dangerFill, borderWidth: 2, borderColor: Colors.surface.page },
   sheet: { ...Platform.select({ web: { position: 'fixed' }, default: { position: 'absolute' } }), top: 0, left: 0, right: 0, bottom: 0, zIndex: 110, backgroundColor: Colors.surface.card },
@@ -1404,7 +1365,7 @@ const styles = StyleSheet.create({
   editor: { borderRadius: Radii.card.default, borderWidth: 2, borderColor: ED.line, backgroundColor: ED.bg, overflow: 'hidden' },
   edBar: { flexDirection: 'row', alignItems: 'center', gap: Space[10], paddingHorizontal: Space[16], minHeight: 56, backgroundColor: ED.bar, borderBottomWidth: 2, borderBottomColor: ED.line },
   edFile: { fontFamily: MONO, fontSize: fs(15), color: ED.text },
-  edLang: { paddingHorizontal: Space[10], height: 24, justifyContent: 'center', borderRadius: 8, backgroundColor: 'rgba(28,176,246,0.16)' },
+  edLang: { paddingHorizontal: Space[10], height: 24, justifyContent: 'center', borderRadius: 5, backgroundColor: 'rgba(28,176,246,0.16)' },
   edLangText: { fontFamily: FontFamilies.demi, fontSize: fs(15), letterSpacing: 0.4, color: '#49C0F8' },
   edBtn: { flexDirection: 'row', alignItems: 'center', gap: Space[8], minHeight: 40, paddingHorizontal: Space[12], borderRadius: Radii.control.md },
   edBtnText: { fontFamily: FontFamilies.demi, fontSize: fs(15), color: ED.text },
@@ -1422,7 +1383,7 @@ const styles = StyleSheet.create({
   outText: { flex: 1, fontFamily: MONO, fontSize: fs(15), lineHeight: lh(22), color: ED.text },
   sentence: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 8, rowGap: 6, marginTop: Space[20], marginBottom: Space[28] },
   sWord: { lineHeight: lh(36) },
-  gapBox: { minWidth: 112, height: 40, paddingHorizontal: Space[12], borderRadius: 10, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
+  gapBox: { minWidth: 112, height: 40, paddingHorizontal: Space[12], borderRadius: 6, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
   bank: { flexDirection: 'row', flexWrap: 'wrap', gap: Space[12] },
   hugWrap: { maxWidth: '100%' },
   chip: { minHeight: CONTROL, paddingHorizontal: Space[20], justifyContent: 'center', borderRadius: Radii.control.md, borderWidth: 2, borderColor: Colors.border.subtle, backgroundColor: Colors.surface.card },
@@ -1446,7 +1407,7 @@ const styles = StyleSheet.create({
   matchWrap: { alignSelf: 'stretch' },
   stepper: { gap: Space[20] },
   stepDots: { flexDirection: 'row', justifyContent: 'space-between', gap: Space[8] },
-  stepDot: { flex: 1, maxWidth: 56, height: 44, borderRadius: 14, borderWidth: 2, borderColor: Colors.border.control, alignItems: 'center', justifyContent: 'center' },
+  stepDot: { flex: 1, maxWidth: 56, height: 44, borderRadius: 8, borderWidth: 2, borderColor: Colors.border.control, alignItems: 'center', justifyContent: 'center' },
   stepDotOn: { borderWidth: 3, borderColor: Colors.text.primary },
   stepDotText: { fontFamily: FontFamilies.demi, fontSize: fs(16), color: Colors.text.secondary },
   termCard: { alignItems: 'center', gap: Space[4], paddingVertical: Space[20], borderRadius: Radii.card.default, backgroundColor: Colors.surface.raised },
@@ -1483,15 +1444,12 @@ const styles = StyleSheet.create({
   console: { gap: Space[4], padding: Space[20], borderRadius: Radii.option, backgroundColor: Colors.surface.raised, marginTop: Space[16] },
 
   complete: { gap: Space[12], alignItems: 'center', paddingTop: Space[64] },
-  medalWrap: { width: 140, height: 140, alignItems: 'center', justifyContent: 'center', marginBottom: Space[12] },
-  medal: { width: 104, height: 104, borderRadius: 52, backgroundColor: Colors.brand.gold, alignItems: 'center', justifyContent: 'center' },
-  ring: { position: 'absolute', width: 104, height: 104, borderRadius: 52, borderWidth: 3, borderColor: Colors.brand.gold },
+  medalWrap: { width: 96, height: 96, alignItems: 'center', justifyContent: 'center', marginBottom: Space[12] },
+  medal: { width: 80, height: 80, borderRadius: 40, backgroundColor: Colors.brand.soft, alignItems: 'center', justifyContent: 'center' },
   tiles: { flexDirection: 'row', flexWrap: 'wrap', gap: Space[12], justifyContent: 'center', alignSelf: 'stretch', marginTop: Space[12] },
   tile: { flexGrow: 1, flexBasis: 150, maxWidth: 220, alignItems: 'center', gap: Space[2], paddingVertical: Space[16], paddingHorizontal: Space[12], borderRadius: Radii.card.default, borderWidth: 2, borderColor: Colors.border.subtle, backgroundColor: Colors.surface.card },
   tileLabel: { fontFamily: FontFamilies.medium, fontSize: fs(15), color: Colors.text.secondary },
   skill: { alignSelf: 'center', width: '100%', maxWidth: 460, marginTop: Space[12] },
   skillTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' },
-  streak: { paddingHorizontal: Space[12], height: 32, justifyContent: 'center', borderRadius: 999, borderWidth: 2 },
-  streakText: { fontFamily: FontFamilies.demi, fontSize: fs(15) },
   centerText: { textAlign: 'center' },
 });

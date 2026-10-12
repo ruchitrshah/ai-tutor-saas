@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
     maxHeight: '72%',
     backgroundColor: Colors.surface.page,
-    borderRadius: 28,
+    borderRadius: 17,
     paddingTop: Space[24],
     paddingHorizontal: Space[20],
     paddingBottom: Space[16],

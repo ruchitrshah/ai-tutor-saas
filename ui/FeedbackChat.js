@@ -5,10 +5,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, Easing, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { Colors, FontFamilies, Radii, Space, useReducedMotion } from '../brand';
-import { MASCOTS } from '../ui/Mascot';
 import { feedbackReply, openingChips } from '../tutor/feedback';
 import { usePortal } from '../store/portal';
-import Mascot from '../ui/Mascot';
+import TutorAvatar from './TutorAvatar';
 import Reveal from '../ui/Reveal';
 import { Composer } from '../ui/TutorDock';
 import { fs, lh } from '../theme/fluid';
@@ -17,8 +16,8 @@ let ids = 0;
 const nextId = () => `f${ids++}`;
 
 export default function FeedbackChat() {
-  const { go, skills, stats, user, mascot } = usePortal();
-  const name = (MASCOTS.find((m) => m.key === mascot) || MASCOTS[0]).name;
+  const { go, skills, stats, user } = usePortal();
+  const name = 'AI Tutor';
   const reduced = useReducedMotion();
   const first = user.name.split(' ')[0];
   const scroll = useRef(null);
@@ -55,7 +54,7 @@ export default function FeedbackChat() {
     <View style={styles.root}>
       <View style={styles.top}>
         <View style={styles.who}>
-          <Mascot head live size={44} />
+          <TutorAvatar size={44} />
           <View>
             <Text style={styles.whoName}>{name}</Text>
             <Text style={styles.whoSub}>Your progress, in chat</Text>
@@ -69,7 +68,7 @@ export default function FeedbackChat() {
             <Reveal key={m.id} y={10} duration={240} style={styles.item}>
               {m.from === 'tutor' ? (
                 <View style={styles.tutorRow}>
-                  <View style={styles.avatar}><Mascot head size={36} /></View>
+                  <View style={styles.avatar}><TutorAvatar size={32} /></View>
                   <View style={styles.tutorBubble}><Text style={styles.msg}>{m.text}</Text></View>
                 </View>
               ) : (
@@ -88,7 +87,7 @@ export default function FeedbackChat() {
           ))}
           {busy ? (
             <View style={[styles.tutorRow, styles.item]}>
-              <View style={styles.avatar}><Mascot head size={36} /></View>
+              <View style={styles.avatar}><TutorAvatar size={32} /></View>
               <View style={styles.tutorBubble}><Dots /></View>
             </View>
           ) : null}
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
   col: { width: '100%', gap: Space[16] },
   item: { gap: Space[12] },
   tutorRow: { flexDirection: 'row', alignItems: 'flex-end', gap: Space[8] },
-  avatar: { width: 36, height: 32, justifyContent: 'flex-end' },
+  avatar: { width: 32, height: 32 },
   tutorBubble: { maxWidth: '84%', flexShrink: 1, paddingHorizontal: Space[16], paddingVertical: Space[12], backgroundColor: Colors.surface.raised, borderWidth: 2, borderColor: Colors.border.subtle, borderRadius: Radii.bubble, borderBottomLeftRadius: 4 },
   meRow: { alignItems: 'flex-end' },
   meBubble: { maxWidth: '84%', paddingHorizontal: Space[16], paddingVertical: Space[12], backgroundColor: Colors.brand.soft, borderWidth: 2, borderColor: Colors.brand.borderSoft, borderRadius: Radii.bubble, borderBottomRightRadius: 4 },

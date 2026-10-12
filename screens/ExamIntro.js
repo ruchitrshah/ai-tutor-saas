@@ -12,7 +12,6 @@ import { EXAM_META, EXAM_MINUTES, EXAM_QUESTIONS, SYLLABUS } from '../data/exams
 import { usePortal } from '../store/portal';
 import { X } from '../ui/icons';
 import { SUBJECT_STYLE } from '../ui/kinds';
-import Mascot from '../ui/Mascot';
 import Reveal from '../ui/Reveal';
 import { fs, lh } from '../theme/fluid';
 
@@ -26,7 +25,6 @@ export default function ExamIntro() {
   const tries = (examAttempts && examAttempts[subject.id] ? examAttempts[subject.id].length : 0);
   const meta = EXAM_META[subject.id] || EXAM_META.a;
   const accent = Colors.accent[meta.tone];
-  const [box, setBox] = useState({ w: 0, h: 0 });
   const split = width >= 900;
   const phone = width < 640;
 
@@ -39,20 +37,12 @@ export default function ExamIntro() {
     </Reveal>
   );
 
-  // The left half is plain white: the copy near the centre line, the character standing in the
-  // bottom-left corner, just above the footer.
+  // The left half is plain white: the copy near the centre line, and nothing else.
   const pane = (content, mode) => (
     <View
       style={[styles.pane, mode === 'split' ? styles.paneSplit : styles.paneStacked]}
-      onLayout={(e) => setBox({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height })}
     >
       {mode === 'split' ? <ScrollView style={styles.paneScroll} contentContainerStyle={styles.colScroll} showsVerticalScrollIndicator={false}>{content}</ScrollView> : content}
-      {/* In the same column as the copy, so its left edge lines up with the text above. */}
-      <View pointerEvents="none" style={styles.mascotLane}>
-        <View style={mode === 'split' ? styles.mascotColumn : styles.mascotColumnStacked}>
-          <Mascot head live kind={meta.mascot} size={mode === 'split' ? Math.min(300, Math.max(200, box.w * 0.3)) : 150} gesture={{ name: 'wave', id: 1 }} />
-        </View>
-      </View>
     </View>
   );
 
@@ -107,15 +97,12 @@ export default function ExamIntro() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.surface.page },
   main: { flex: 1, minHeight: 0 },
-  close: { position: 'absolute', top: Space[20], left: Space[20], zIndex: 3, width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center', ...Platform.select({ web: { cursor: 'pointer' } }) },
+  close: { position: 'absolute', top: Space[20], left: Space[20], zIndex: 3, width: 44, height: 44, borderRadius: 7, alignItems: 'center', justifyContent: 'center', ...Platform.select({ web: { cursor: 'pointer' } }) },
   cols: { flex: 1, flexDirection: 'row' },
   pane: { overflow: 'hidden' },
   paneSplit: { flex: 1 },
   paneStacked: { minHeight: 360 },
   paneScroll: { flex: 1 },
-  mascotLane: { position: 'absolute', left: 0, right: 0, bottom: 0, alignItems: 'flex-end' },
-  mascotColumn: { width: '100%', maxWidth: 560, paddingHorizontal: Space[48], alignItems: 'flex-start' },
-  mascotColumnStacked: { width: '100%', paddingHorizontal: Space[20], alignItems: 'flex-start' },
   colRight: { flex: 1, backgroundColor: Colors.surface.raised },
   colScroll: { flexGrow: 1 },
   stack: { paddingTop: Space[72], paddingBottom: Space[24], gap: Space[24] },

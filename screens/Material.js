@@ -15,8 +15,7 @@ import ProgressBar from '../components/ProgressBar';
 import { q } from '../data/courses';
 import { usePortal } from '../store/portal';
 import { PAGE_TITLE, SUB, TITLE } from '../theme/type';
-import { X } from '../ui/icons';
-import Mascot from '../ui/Mascot';
+import { Check, Sparkles, Upload, X } from '../ui/icons';
 import Reveal from '../ui/Reveal';
 import Shell from '../ui/Shell';
 import UploadsRail from '../ui/UploadsRail';
@@ -24,6 +23,20 @@ import { fs, lh } from '../theme/fluid';
 
 const STEPS = ['Reading your material', 'Finding the key ideas', 'Writing your questions', 'Getting your tutor ready'];
 const STEP_MS = 1500;
+
+// The link field always holds a link: "https://" is already there, so the student types only
+// the rest. Pasting a whole address (with its own https:// or http://) replaces the prefix
+// instead of doubling it, and the prefix itself cannot be deleted.
+const PREFIX = 'https://';
+function normaliseLink(v) {
+  const raw = v.replace(/^\s+/, '');
+  if (raw.length < PREFIX.length && PREFIX.startsWith(raw.toLowerCase())) return PREFIX;
+  const m = raw.match(/^(?:https?:\/\/)+/i);
+  if (!m) return PREFIX + raw;
+  const last = m[0].toLowerCase().split('//').filter(Boolean).pop() + '//';
+  return last + raw.slice(m[0].length);
+}
+const linkRest = (v) => v.replace(/^https?:\/\//i, '').trim();
 
 const sizeOf = (n) => (n > 1048576 ? `${(n / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(n / 1024))} KB`);
 const baseName = (s) => (s || 'Your material').replace(/\.[^/.]+$/, '').replace(/[-_]+/g, ' ').trim() || 'Your material';
@@ -48,10 +61,11 @@ export default function Material() {
   const { go } = usePortal();
   const [phase, setPhase] = useState('pick'); // pick | prep
   const [file, setFile] = useState(null); // { name, size }
-  const [text, setText] = useState('');
+  const [text, setText] = useState(PREFIX);
   const [target, setTarget] = useState(null); // an earlier upload picked from the list
-  const ready = !!file || text.trim().length > 3;
-  const label = file ? file.name : text.trim().slice(0, 40);
+  // A link counts once it has a dot with something on each side (example.com).
+  const ready = !!file || /\S\.\S/.test(linkRest(text));
+  const label = file ? file.name : linkRest(text).slice(0, 40);
 
   const header = (
     <View style={styles.header}>
@@ -79,10 +93,12 @@ export default function Material() {
         </Reveal>
         <Reveal delay={100} style={styles.paste}>
           <Input
-            label="Or paste a link or text"
+            label="Or add a link"
             value={text}
-            onChangeText={setText}
-            placeholder="https://…"
+            onChangeText={(v) => setText(normaliseLink(v))}
+            placeholder="https://example.com"
+            keyboardType="url"
+            autoCorrect={false}
             style={styles.field}
             autoCapitalize="none"
           />
@@ -169,11 +185,11 @@ function DropZone({ file, onFile }) {
         </View>
       ) : (
         <>
-          <Mascot head size={96} />
+          <View style={styles.emptyIcon}><Upload size={28} color={Colors.icon.secondary} strokeWidth={2.2} /></View>
           <Text style={[TITLE, styles.center]}>Turn your material into practice</Text>
           <Text style={[SUB, styles.center]}>Drop in files or a folder. Any format works.</Text>
           <View style={styles.chooseRow}>
-            <Button title="Choose Files" variant="outline" onPress={pick(files)} style={styles.choose} />
+            <Button title="Choose Files" onPress={pick(files)} style={styles.choose} />
             <Button title="Choose A Folder" variant="outline" onPress={pick(folder)} style={styles.choose} />
           </View>
         </>
@@ -188,7 +204,6 @@ function DropZone({ file, onFile }) {
 function Preparing({ onCancel, onDone }) {
   const reduced = useReducedMotion();
   const [step, setStep] = useState(0); // lines finished
-  const [gesture, setGesture] = useState(null);
   const finished = step >= STEPS.length;
 
   useEffect(() => {
@@ -199,7 +214,6 @@ function Preparing({ onCancel, onDone }) {
 
   useEffect(() => {
     if (!finished) return undefined;
-    setGesture({ name: 'cheer', id: 1 });
     const t = setTimeout(onDone, reduced ? 600 : 1400);
     return () => clearTimeout(t);
   }, [finished, onDone, reduced]);
@@ -208,7 +222,9 @@ function Preparing({ onCancel, onDone }) {
   return (
     <View style={styles.prep}>
       <Reveal y={6} scaleFrom={0.9} duration={320}>
-        <Mascot head live size={140} mood={finished ? 'idle' : 'think'} gesture={gesture} />
+        <View style={styles.prepIcon}>
+          {finished ? <Check size={36} color={Colors.accent.blue.text} strokeWidth={2.6} /> : <Sparkles size={32} color={Colors.accent.blue.text} strokeWidth={2.2} />}
+        </View>
       </Reveal>
       <OneLine text={line} />
       <View style={styles.bar} accessibilityLabel="Building your course" accessibilityRole="progressbar">
@@ -271,6 +287,8 @@ const styles = StyleSheet.create({
   build: { alignSelf: 'stretch' },
 
 
+  emptyIcon: { width: 64, height: 64, borderRadius: 32, backgroundColor: Colors.surface.raised, alignItems: 'center', justifyContent: 'center' },
+  prepIcon: { width: 72, height: 72, borderRadius: 36, backgroundColor: Colors.accent.blue.soft, alignItems: 'center', justifyContent: 'center' },
   prep: { alignItems: 'center', gap: Space[24], paddingTop: Space[96] },
   line: { fontFamily: FontFamilies.demi, fontSize: fs(24), lineHeight: lh(32), letterSpacing: -0.2, color: Colors.text.primary, textAlign: 'center', minHeight: 32 },
   bar: { alignSelf: 'center', width: '100%', maxWidth: 360 },

@@ -13,7 +13,7 @@ import { BookOpen, CircleUser, Dumbbell, Lightbulb, PanelLeftClose, PanelLeftOpe
 import { CONTROL, Colors, ColorUtils, FontFamilies, Motion, Palette, Radii, Space, useReducedMotion } from '../brand';
 import { usePortal } from '../store/portal';
 import { TITLE } from '../theme/type';
-import Mascot from './Mascot';
+import TutorAvatar from './TutorAvatar';
 import Reveal from './Reveal';
 import Tile from './Tile';
 import { fs } from '../theme/fluid';
@@ -69,7 +69,7 @@ export default function Shell({ active = 'homework', sidebar = true, bottomNav =
   }, [compact, reduced, sbW]);
   const labelOp = sbW.interpolate({ inputRange: [84, 170, 288], outputRange: [0, 0, 1], extrapolate: 'clamp' });
   const toggleX = sbW.interpolate({ inputRange: [84, 288], outputRange: [3, 210] });
-  // Expanded: mascot at the left, toggle at the right. Collapsed: the mascot is gone and the
+  // Expanded: the mark at the left, toggle at the right. Collapsed: the mark is gone and the
   // toggle takes its place.
   const toggleY = 4;
   const topH = 52;
@@ -86,9 +86,9 @@ export default function Shell({ active = 'homework', sidebar = true, bottomNav =
               sidebar slides: the labels just fade out. */}
           <View style={styles.sidebarInner}>
             <View style={[styles.topRow, { height: topH }]}>
-              {/* The tutor, sized like the icons below it and on the same line. */}
+              {/* The tutor's mark, on the same line as the icons below. */}
               <Animated.View style={[styles.brand, { opacity: labelOp }]} pointerEvents="none" accessibilityRole="image" accessibilityLabel="AI Tutor">
-                <Mascot head size={36} />
+                <TutorAvatar size={36} />
               </Animated.View>
               {width >= 960 && (
                 <Animated.View style={[styles.toggleSlot, { left: toggleX, top: toggleY }]}>
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
   toggleSlot: { position: 'absolute', top: 0 },
   sidebarCompact: { width: 84, alignItems: 'center', paddingHorizontal: Space[12] },
   topRow: { marginBottom: Space[16], position: 'relative' },
-  brand: { position: 'absolute', left: 7, top: 8, width: 36, height: 36, justifyContent: 'flex-end', alignItems: 'center' },
+  brand: { position: 'absolute', left: 7, top: 8, height: 36, flexDirection: 'row', alignItems: 'center', gap: Space[12] },
   toggle: { width: 44, height: 44, borderRadius: Radii.control.md, alignItems: 'center', justifyContent: 'center' },
   navItem: { overflow: 'hidden', flexDirection: 'row', alignItems: 'center', gap: Space[16], minHeight: 52, paddingHorizontal: 12, borderRadius: Radii.control.md },
   navItemCompact: { width: CONTROL + 8, justifyContent: 'center', paddingHorizontal: 0 },

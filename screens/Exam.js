@@ -13,9 +13,8 @@ import { findSubject } from '../data/courses';
 import { EXAM_GRADIENT, EXAM_MINUTES, EXAM_QUESTIONS, examFor, shuffled } from '../data/exams';
 import { usePortal } from '../store/portal';
 import { SUB, TITLE } from '../theme/type';
-import { Clock } from '../ui/icons';
 import { SUBJECT_STYLE } from '../ui/kinds';
-import Mascot from '../ui/Mascot';
+import { Check, Clock, RotateCcw } from '../ui/icons';
 import Reveal from '../ui/Reveal';
 import { Chip, Draggable, DropZone, FooterBar, Letter, Page, Sentence } from './Task';
 import { fs, lh } from '../theme/fluid';
@@ -245,7 +244,9 @@ function Result({ subject, result, onRevisions, onBack }) {
     <View style={styles.resultWrap}>
       <LinearGradient colors={[a, b]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.resultCard}>
         <Reveal y={6} scaleFrom={0.9} duration={360}>
-          <Mascot head live size={120} gesture={{ name: good ? 'cheer' : 'offer', id: 1 }} />
+          <View style={styles.resultBadge}>
+            {good ? <Check size={36} color="#FFFFFF" strokeWidth={2.6} /> : <RotateCcw size={32} color="#FFFFFF" strokeWidth={2.4} />}
+          </View>
         </Reveal>
         <Reveal delay={reduced ? 0 : 140}>
           <Text style={styles.scoreLabel}>{subject.name}</Text>
@@ -290,6 +291,7 @@ const styles = StyleSheet.create({
   timer: { flexDirection: 'row', alignItems: 'center', gap: Space[6], minWidth: 76, marginLeft: Space[12], justifyContent: 'flex-end' },
   timerText: { fontFamily: FontFamilies.demi, fontSize: fs(17), color: Colors.text.primary },
   resultWrap: { alignItems: 'center', paddingTop: Space[16] },
+  resultBadge: { width: 72, height: 72, borderRadius: 36, backgroundColor: 'rgba(255,255,255,0.22)', alignItems: 'center', justifyContent: 'center' },
   resultCard: { width: '100%', maxWidth: 520, alignItems: 'center', gap: Space[16], paddingVertical: Space[32], paddingHorizontal: Space[24], borderRadius: Radii.dialog },
   scoreLabel: { fontFamily: FontFamilies.demi, fontSize: fs(15), letterSpacing: 1, textTransform: 'uppercase', color: 'rgba(255,255,255,0.85)', textAlign: 'center' },
   score: { fontFamily: FontFamilies.heavy, fontSize: fs(64), lineHeight: lh(72), color: '#FFFFFF', textAlign: 'center' },

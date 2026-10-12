@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   tick: {
     width: 22,
     height: 22,
-    borderRadius: 11,
+    borderRadius: 7,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,

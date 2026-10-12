@@ -220,10 +220,10 @@ export const EXAM_GRADIENT = {
 // orange with the Fox, green with the Frog, blue with the Cactus), so no screen mixes a
 // yellow character into a purple page. Brand buttons stay the brand blue.
 export const EXAM_META = {
-  a: { level: 2, mascot: 'bear', tone: 'purple', shape: 'waves' },
-  b: { level: 1, mascot: 'fox', tone: 'orange', shape: 'rings' },
-  c: { level: 2, mascot: 'frog', tone: 'green', shape: 'steps' },
-  d: { level: 3, mascot: 'cactus', tone: 'blue', shape: 'bars' },
+  a: { level: 2, tone: 'purple', shape: 'waves' },
+  b: { level: 1, tone: 'orange', shape: 'rings' },
+  c: { level: 2, tone: 'green', shape: 'steps' },
+  d: { level: 3, tone: 'blue', shape: 'bars' },
 };
 
 export const EXAM_TYPES = ['Multiple Choice', 'Fill in the Blank', 'Put in Order', 'Match Pairs'];

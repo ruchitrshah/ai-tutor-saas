@@ -17,7 +17,6 @@ import Shell from '../ui/Shell';
 import { LinearGradient } from 'expo-linear-gradient';
 import Button from '../components/Button';
 import Dropdown from '../ui/Dropdown';
-import Mascot from '../ui/Mascot';
 import Explainer, { SubWithLink } from '../ui/Explainer';
 import GradientCard, { ACCENTS } from '../ui/GradientCard';
 import { CHALLENGES, LEVELS } from '../data/levels';
@@ -26,9 +25,9 @@ import { fs, lh } from '../theme/fluid';
 
 
 const POINTS = [
-  { mascot: 'fox', title: 'Pick a level', body: 'Warm Up, Stretch or Challenge sets how many hints you get and how much your tutor tells.' },
-  { mascot: 'owl', title: 'Choose an exercise', body: 'Multiple choice, speaking, writing, code and more. Short, and you can repeat them as often as you like.' },
-  { mascot: 'bear', title: 'Mistakes are kept', body: 'Anything you miss goes to Revisions. Practice never changes your homework progress.' },
+  { title: 'Pick a level', body: 'Warm Up, Stretch or Challenge sets how many hints you get and how much your tutor tells.' },
+  { title: 'Choose an exercise', body: 'Multiple choice, speaking, writing, code and more. Short, and you can repeat them as often as you like.' },
+  { title: 'Mistakes are kept', body: 'Anything you miss goes to Revisions. Practice never changes your homework progress.' },
 ];
 
 export default function Practice() {
@@ -98,27 +97,21 @@ export default function Practice() {
 }
 
 // The big card at the top: bring your own material. A deep teal → blue → violet field,
-// faint target rings, and the tutor rising out of the bottom corner.
+// and faint target rings.
 function UploadHero({ onPress }) {
   const { width } = useWindowDimensions();
   const [w, setW] = useState(0);
   const small = (w || width) < 560;
-  // The tutor never touches the top edge: its height stays well under the card's, and the
-  // copy stops short of it so nothing runs underneath.
-  const mascot = small ? 120 : Math.round(Math.min(210, Math.max(150, (w || 720) * 0.24)));
-  const copyMax = small ? undefined : Math.max(240, Math.min(520, (w || 720) - mascot - 80));
+  const copyMax = small ? undefined : 560;
   return (
     <LinearGradient
-      colors={['#1C6F62', '#17327A', '#3B2070']}
-      locations={[0, 0.55, 1]}
+      colors={['#0A4F82', '#0B78BC']}
+      locations={[0, 1]}
       start={{ x: 0.2, y: 0 }}
       end={{ x: 0.5, y: 1 }}
       onLayout={(e) => setW(e.nativeEvent.layout.width)}
       style={[styles.hero, small && { minHeight: 300, padding: Space[24] }]}
     >
-      <View pointerEvents="none" style={styles.art}>
-        <Mascot head live size={mascot} gesture={{ name: 'wave', id: 1 }} />
-      </View>
       <View style={[styles.heroText, copyMax ? { maxWidth: copyMax } : null]}>
         <Text style={styles.heroTitle}>Learn From Your Own Material</Text>
         <Text style={styles.heroSub}>Upload notes, slides, a PDF or a link. Your tutor builds a course just for you, then quizzes you on it.</Text>
@@ -157,7 +150,7 @@ function ExerciseCard({ Icon, accent, title, text, onPress }) {
       onBlur={() => setOn(false)}
       accessibilityRole="button"
       accessibilityLabel={`${title}. ${text}`}
-      style={({ pressed }) => [styles.card, on && { borderColor: ColorUtils.rgba(c.solid, 0.7) }, pressed && { transform: [{ scale: 0.99 }] }]}
+      style={({ pressed }) => [styles.card, on && { borderColor: Colors.border.strong }, pressed && { transform: [{ scale: 0.99 }] }]}
     >
       <View style={[styles.tile, { backgroundColor: c.soft }, on && { transform: [{ scale: 1.06 }] }]}>
         <Icon size={26} color={c.text} strokeWidth={2.2} />
@@ -249,7 +242,7 @@ const styles = StyleSheet.create({
   headText: { flex: 1, flexBasis: 220, gap: Space[4], minWidth: 0 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: Space[16] },
   card: { flex: 1, minHeight: 168, gap: Space[16], padding: Space[24], borderRadius: Radii.card.lg, borderWidth: 2, borderColor: Colors.border.subtle, backgroundColor: Colors.surface.card, ...Platform.select({ web: { cursor: 'pointer', transitionProperty: 'border-color', transitionDuration: '180ms' } }) },
-  tile: { width: 52, height: 52, borderRadius: 16, alignItems: 'center', justifyContent: 'center', ...Platform.select({ web: { transitionProperty: 'transform', transitionDuration: '180ms', transitionTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)' } }) },
+  tile: { width: 52, height: 52, borderRadius: 10, alignItems: 'center', justifyContent: 'center', ...Platform.select({ web: { transitionProperty: 'transform', transitionDuration: '180ms', transitionTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)' } }) },
   cardText: { gap: Space[4] },
   cardTitle: { fontFamily: FontFamilies.demi, fontSize: Platform.select({ web: 'clamp(17px, 0.4vw + 14px, 20px)', default: 18 }), lineHeight: Platform.select({ web: 'clamp(24px, 0.5vw + 19px, 27px)', default: 25 }), color: Colors.text.primary },
   cardSub: { fontFamily: FontFamilies.medium, fontSize: fs(16), lineHeight: lh(23), color: Colors.text.secondary },
@@ -265,7 +258,6 @@ const styles = StyleSheet.create({
   heroTitle: { fontFamily: FontFamilies.heavy, fontSize: Platform.select({ web: 'clamp(24px, 1.6vw + 16px, 34px)', default: 28 }), lineHeight: Platform.select({ web: 'clamp(30px, 1.8vw + 20px, 40px)', default: 34 }), letterSpacing: -0.4, color: '#FFFFFF' },
   heroSub: { fontFamily: FontFamilies.medium, fontSize: Platform.select({ web: 'clamp(16px, 0.4vw + 13px, 19px)', default: 17 }), lineHeight: Platform.select({ web: 'clamp(24px, 0.5vw + 19px, 28px)', default: 25 }), color: 'rgba(255,255,255,0.92)' },
   heroBtn: { alignSelf: 'flex-start' },
-  art: { position: 'absolute', right: 20, bottom: 0 },
 
 
   layer: { ...Platform.select({ web: { position: 'fixed' }, default: { position: 'absolute' } }), top: 0, left: 0, right: 0, bottom: 0, zIndex: 100, alignItems: 'center', justifyContent: 'center', padding: Space[24] },

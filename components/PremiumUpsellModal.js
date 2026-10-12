@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 12,
     backgroundColor: 'rgba(0,0,0,0.4)',
     alignItems: 'center',
     justifyContent: 'center',
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   desktopModalBox: {
     width: 500,
     height: 750,
-    borderRadius: 32,
+    borderRadius: 19,
     overflow: 'hidden',
     backgroundColor: '#000',
   },
@@ -232,8 +232,8 @@ const styles = StyleSheet.create({
   webMobileSheet: {
     width: '100%',
     height: '92%',
-    borderTopLeftRadius: 32,
-    borderTopRightRadius: 32,
+    borderTopLeftRadius: 19,
+    borderTopRightRadius: 19,
     overflow: 'hidden',
     backgroundColor: '#000',
   },

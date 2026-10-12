@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   step: {
     width: 32, // Slightly smaller for 7 steps to avoid crowding
     height: 32,
-    borderRadius: 16,
+    borderRadius: 10,
     backgroundColor: Colors.surface.soft,
     justifyContent: 'center',
     alignItems: 'center',

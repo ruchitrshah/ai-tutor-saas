@@ -7,15 +7,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 
-import { ColorUtils, Colors, Radii, Space } from '../brand';
+import { Colors, Radii, Space } from '../brand';
 import Button from '../components/Button';
 import ProgressBar from '../components/ProgressBar';
 import { SUBJECTS, subjectProgress, usePortal } from '../store/portal';
 import { PAGE_TITLE, SUB, TITLE } from '../theme/type';
 import { ArrowRight, Info } from '../ui/icons';
 import DueTag from '../ui/DueTag';
-import { SUBJECT_STYLE } from '../ui/kinds';
-import LottieBurst from '../ui/LottieBurst';
 import Reveal from '../ui/Reveal';
 import Shell, { cardBox } from '../ui/Shell';
 import Rail from './Rail';
@@ -50,7 +48,6 @@ export default function Homework() {
 function SubjectCard({ subject: s }) {
   const { go, done, openDetails } = usePortal();
   const p = subjectProgress(s, done);
-  const accent = Colors.accent[SUBJECT_STYLE[s.id].accent];
   const phone = useWindowDimensions().width < 600;
   const [launching, setLaunching] = useState(false);
   const [hover, setHover] = useState(false);
@@ -87,11 +84,10 @@ function SubjectCard({ subject: s }) {
       style={[
         styles.card,
         Platform.select({ web: { transitionProperty: 'border-color', transitionDuration: '220ms', transitionTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)' } }),
-        // Hover: no movement. A soft light in the subject's colour and one Lottie burst.
-        hover && { borderColor: ColorUtils.rgba(accent.solid, 0.6) },
+        // Hover: no movement, just a slightly darker grey border.
+        hover && { borderColor: Colors.border.strong },
       ]}
     >
-      <LottieBurst play={hover} colors={[accent.solid, accent.text, '#FFFFFF']} />
       {/* Phone: the deadline and the info button share the top row; the name follows. */}
       {phone ? (
         <View style={styles.topRow}>
@@ -107,7 +103,7 @@ function SubjectCard({ subject: s }) {
         {phone ? null : info}
       </View>
 
-      <ProgressBar currentStep={p.count} totalSteps={p.total} sparkle={false} shine height={16} gap={p.total > 10 ? 3 : 6} fillColor={accent.solid} />
+      <ProgressBar currentStep={p.total ? p.count / p.total : 0} totalSteps={1} sparkle={false} height={8} fillColor={Colors.brand.primary} />
 
       {p.next ? (
         <View style={styles.next}>

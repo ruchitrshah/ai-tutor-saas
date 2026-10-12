@@ -14,9 +14,9 @@ import { fs, lh } from '../theme/fluid';
 
 // Who does what. Each point has its own character, so the three read as three people.
 const POINTS = [
-  { mascot: 'fox', title: 'Your mistakes are saved', body: 'When you slip in homework, practice or a revision, we keep it here so you can go over it later.' },
-  { mascot: 'owl', title: 'Your professors see the picture', body: 'They get an overview of the mistakes you make, and of the whole class.' },
-  { mascot: 'bear', title: 'They add what you need', body: 'From that, they add modules for you to practise and revise, so the help fits the course.' },
+  { title: 'Your mistakes are saved', body: 'When you slip in homework, practice or a revision, we keep it here so you can go over it later.' },
+  { title: 'Your professors see the picture', body: 'They get an overview of the mistakes you make, and of the whole class.' },
+  { title: 'They add what you need', body: 'From that, they add modules for you to practise and revise, so the help fits the course.' },
 ];
 
 export default function Revisions() {
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   link: { fontFamily: FontFamilies.demi, fontSize: fs(16), lineHeight: lh(24), color: Colors.text.link, textDecorationLine: 'underline' },
   linkHover: { color: Colors.text.accent, textDecorationLine: 'none' },
   point: { flexDirection: 'row', alignItems: 'center', gap: Space[16] },
-  face: { width: 72, height: 72, borderRadius: 20, backgroundColor: Colors.surface.raised, alignItems: 'center', justifyContent: 'flex-end', overflow: 'hidden' },
+  face: { width: 72, height: 72, borderRadius: 12, backgroundColor: Colors.surface.raised, alignItems: 'center', justifyContent: 'flex-end', overflow: 'hidden' },
   pointText: { flex: 1, minWidth: 0, gap: Space[4] },
   stack: { gap: Space[40] },
   group: { gap: Space[16] },

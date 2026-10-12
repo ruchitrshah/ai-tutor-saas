@@ -29,7 +29,6 @@ export function PortalProvider({ children }) {
   const [stats, setStats] = useState(saved.stats || SEED_STATS);
   const [lang, setLang] = useState(saved.lang || 'en'); // 'en' | 'hi' (Hinglish)
   const [skills, setSkills] = useState(saved.skills || SEED_SKILLS);
-  const [mascot, setMascot] = useState(saved.mascot || 'cactus');
   // Mistakes from finished exams, kept as extra groups for the Revisions page.
   const [examRevs, setExamRevs] = useState(saved.examRevs || []);
   // Every finished exam, by subject, so a card can say "attempt 2" and show the best score.
@@ -47,11 +46,11 @@ export function PortalProvider({ children }) {
   useEffect(() => {
     if (Platform.OS !== 'web') return;
     try {
-      window.localStorage.setItem(SAVE_KEY, JSON.stringify({ signedIn, route, done, stats, lang, skills, mascot, examRevs, examAttempts }));
+      window.localStorage.setItem(SAVE_KEY, JSON.stringify({ signedIn, route, done, stats, lang, skills, examRevs, examAttempts }));
     } catch (e) {
       /* private mode: progress just won't survive a reload */
     }
-  }, [signedIn, route, done, stats, lang, skills, mascot, examRevs, examAttempts]);
+  }, [signedIn, route, done, stats, lang, skills, examRevs, examAttempts]);
 
   const go = useCallback((name, params = {}) => setRoute({ name, ...params }), []);
 
@@ -94,9 +93,9 @@ export function PortalProvider({ children }) {
     () => ({
       route, go, signedIn, signIn, signOut, user: USER,
       done, completeTask, stats, recordAnswer, recordHint, recordAnswerRequest,
-      lang, setLang, skills, mascot, setMascot, examRevs, addExamRevisions, examAttempts, addExamAttempt, detailsId, openDetails, closeDetails, aboutOpen, openAbout, closeAbout,
+      lang, setLang, skills, examRevs, addExamRevisions, examAttempts, addExamAttempt, detailsId, openDetails, closeDetails, aboutOpen, openAbout, closeAbout,
     }),
-    [route, go, signedIn, signIn, signOut, done, completeTask, stats, recordAnswer, recordHint, recordAnswerRequest, lang, skills, mascot, examRevs, addExamRevisions, examAttempts, addExamAttempt, detailsId, openDetails, closeDetails, aboutOpen, openAbout, closeAbout]
+    [route, go, signedIn, signIn, signOut, done, completeTask, stats, recordAnswer, recordHint, recordAnswerRequest, lang, skills, examRevs, addExamRevisions, examAttempts, addExamAttempt, detailsId, openDetails, closeDetails, aboutOpen, openAbout, closeAbout]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

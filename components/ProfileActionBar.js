@@ -212,8 +212,8 @@ const styles = StyleSheet.create({
   },
 
   blur: {
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
+    borderTopLeftRadius: 17,
+    borderTopRightRadius: 17,
     overflow: 'hidden',
     paddingHorizontal: Space[24],
     paddingTop: Space[14],

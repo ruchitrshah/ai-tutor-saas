@@ -18,7 +18,6 @@ import Material from './screens/Material';
 import Challenge from './screens/Challenge';
 import ExamIntro from './screens/ExamIntro';
 import Exam from './screens/Exam';
-import Mascot from './ui/Mascot';
 import { Profile, Report } from './screens/Simple';
 
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
@@ -64,35 +63,17 @@ const SCREENS = {
   report: Report,
 };
 
-// The browser-tab icon is the tutor the student picked. A hidden copy of the mascot is
-// drawn, its SVG is read back, and it becomes the favicon, so it follows their choice.
+// The browser-tab icon: a blue disc with a white spark, set once from an inline SVG.
 function Favicon() {
-  const { mascot } = usePortal();
-  const holder = React.useRef(null);
   React.useEffect(() => {
     if (Platform.OS !== 'web') return;
-    const t = setTimeout(() => {
-      const svg = holder.current && holder.current.querySelector && holder.current.querySelector('svg');
-      if (!svg) return;
-      const clone = svg.cloneNode(true);
-      clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-      clone.setAttribute('viewBox', '8 -6 104 104'); // square, character rising from the bottom
-      clone.setAttribute('width', '64');
-      clone.setAttribute('height', '64');
-      const href = 'data:image/svg+xml,' + encodeURIComponent(new XMLSerializer().serializeToString(clone));
-      let link = document.querySelector('link[rel="icon"]');
-      if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
-      link.type = 'image/svg+xml';
-      link.href = href;
-    }, 60);
-    return () => clearTimeout(t);
-  }, [mascot]);
-  if (Platform.OS !== 'web') return null;
-  return (
-    <View ref={holder} pointerEvents="none" style={{ position: 'absolute', left: -9999, top: 0, width: 64, height: 64, opacity: 0 }}>
-      <Mascot head size={64} kind={mascot} />
-    </View>
-  );
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='32' fill='#1CB0F6'/><path d='M32 14l4.6 13.4L50 32l-13.4 4.6L32 50l-4.6-13.4L14 32l13.4-4.6z' fill='#fff'/></svg>";
+    let link = document.querySelector('link[rel="icon"]');
+    if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+    link.type = 'image/svg+xml';
+    link.href = 'data:image/svg+xml,' + encodeURIComponent(svg);
+  }, []);
+  return null;
 }
 
 function Router() {

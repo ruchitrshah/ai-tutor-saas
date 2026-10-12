@@ -1,17 +1,15 @@
 // A full-width card for one exercise or topic: a coloured line down the left, a title and
 // a line of text. The whole card is the button: no separate "Start" button inside it.
-// Hover tints its border in its own colour, a short Lottie spark plays in the corner and
-// an arrow slides in at the right edge; the card never moves. Pressing shrinks it 1%.
+// Hover darkens its border to a neutral grey and an arrow slides in at the right edge; the card never moves. Pressing shrinks it 1%.
 // A card that cannot be opened yet (`glow={false}`) has a dim line and no hover.
 //
 // (File name kept; there is no gradient any more.)
 import React, { useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { ColorUtils, Colors, Radii, Space } from '../brand';
+import { Colors, Radii, Space } from '../brand';
 import { SUB, TITLE } from '../theme/type';
 import { ArrowRight } from './icons';
-import LottieBurst from './LottieBurst';
 
 export const ACCENTS = ['blue', 'green', 'purple', 'orange', 'yellow'];
 
@@ -33,13 +31,12 @@ export default function GradientCard({ accent = 'blue', glow = true, title, text
       style={({ pressed }) => [
         styles.card,
         Platform.select({ web: { transitionProperty: 'border-color', transitionDuration: '180ms', transitionTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)' } }),
-        on && { borderColor: ColorUtils.rgba(c.solid, 0.6) },
+        on && { borderColor: Colors.border.strong },
         pressed && { transform: [{ scale: 0.99 }] },
         style,
       ]}
     >
       <View pointerEvents="none" style={[styles.line, { backgroundColor: c.solid, opacity: glow ? 1 : 0.35 }]} />
-      {glow ? <LottieBurst play={hover} colors={[c.solid, c.text, '#FFFFFF']} /> : null}
       <View style={styles.copy}>
         <Text style={TITLE}>{title}</Text>
         {/* Detail (length, count) follows the description in the same paragraph. */}
@@ -59,7 +56,7 @@ export default function GradientCard({ accent = 'blue', glow = true, title, text
           Platform.select({ web: { transitionProperty: 'opacity, transform', transitionDuration: '180ms', transitionTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)' } }),
         ]}
       >
-        <ArrowRight size={22} strokeWidth={2.6} color={c.text} />
+        <ArrowRight size={22} strokeWidth={2.6} color={Colors.icon.secondary} />
       </View>
     </Pressable>
   );

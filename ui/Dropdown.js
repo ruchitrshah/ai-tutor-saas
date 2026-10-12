@@ -241,8 +241,8 @@ const styles = StyleSheet.create({
   sheetLayer: { ...Platform.select({ web: { position: 'fixed' }, default: { position: 'absolute' } }), top: 0, left: 0, right: 0, bottom: 0, zIndex: 100, justifyContent: 'flex-end' },
   sheet: {
     backgroundColor: Colors.surface.card,
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
+    borderTopLeftRadius: 17,
+    borderTopRightRadius: 17,
     maxHeight: '82%',
     paddingTop: Space[8],
     ...Platform.select({ web: { paddingBottom: 'calc(12px + env(safe-area-inset-bottom))' }, default: { paddingBottom: Space[16] } }),

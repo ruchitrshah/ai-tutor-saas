@@ -14,7 +14,6 @@ import { PAGE_TITLE, SUB } from '../theme/type';
 import { ArrowRight, BookOpen, ClipboardList, Timer } from '../ui/icons';
 import Backdrop from '../ui/Backdrop';
 import Explainer, { SubWithLink } from '../ui/Explainer';
-import Mascot from '../ui/Mascot';
 import Reveal from '../ui/Reveal';
 import Shell from '../ui/Shell';
 import Rail from './Rail';
@@ -23,9 +22,9 @@ import { fs, lh } from '../theme/fluid';
 const firstSentence = (t) => (t || '').split('. ')[0].replace(/\.$/, '') + '.';
 
 const POINTS = [
-  { mascot: 'owl', title: 'Timed exams', body: 'Each subject has a 36-question exam against a 45-minute clock, mixed from every exercise type.' },
-  { mascot: 'fox', title: 'Like the real thing', body: 'No hints and no feedback until you finish. You can take it again as often as you like, and your best score is kept.' },
-  { mascot: 'bear', title: 'What you miss comes back', body: 'Mistakes are added to Revisions as topics to improve on.' },
+  { title: 'Timed exams', body: 'Each subject has a 36-question exam against a 45-minute clock, mixed from every exercise type.' },
+  { title: 'Like the real thing', body: 'No hints and no feedback until you finish. You can take it again as often as you like, and your best score is kept.' },
+  { title: 'What you miss comes back', body: 'Mistakes are added to Revisions as topics to improve on.' },
 ];
 
 export default function Challenge() {
@@ -56,13 +55,10 @@ export default function Challenge() {
 function ExamCard({ subject, attempts, onPress }) {
   const meta = EXAM_META[subject.id] || EXAM_META.a;
   const reduced = useReducedMotion();
-  const [gesture, setGesture] = useState(null);
   const lift = useRef(new Animated.Value(0)).current;
-  const count = useRef(0);
   const [bw, setBw] = useState(0);
-  // Hovering says hello: the character reacts in its own way, and the lines behind it open up.
+  // Hovering opens up the lines behind the card.
   const hello = (on) => {
-    if (on) { count.current += 1; setGesture({ name: HELLO[subject.id] || 'wave', id: count.current }); }
     if (!reduced) Animated.timing(lift, { toValue: on ? 1 : 0, duration: on ? 260 : 200, easing: Motion.ease.out, useNativeDriver: Platform.OS !== 'web' }).start();
   };
   const tone = Colors.accent[meta.tone];
@@ -78,7 +74,7 @@ function ExamCard({ subject, attempts, onPress }) {
       onFocus={() => hello(true)}
       onBlur={() => hello(false)}
       accessibilityLabel={`${subject.name}. ${n ? `Attempt ${n + 1}. Best ${best} of ${EXAM_QUESTIONS}.` : 'First attempt.'} ${chapters} chapters, ${EXAM_QUESTIONS} questions, ${EXAM_MINUTES} minutes.`}
-      style={({ hovered, pressed }) => [styles.card, hovered && { borderColor: tone.solid }, pressed && { transform: [{ scale: 0.99 }] }]}
+      style={({ hovered, pressed }) => [styles.card, hovered && { borderColor: Colors.border.strong }, pressed && { transform: [{ scale: 0.99 }] }]}
     >
       {({ hovered }) => (
         <>
@@ -91,7 +87,6 @@ function ExamCard({ subject, attempts, onPress }) {
               <Bars level={meta.level} />
               <Text style={styles.levelText}>{LEVELS[meta.level].name}</Text>
             </View>
-            <View style={styles.mascot}><Mascot head live kind={meta.mascot} size={132} gesture={gesture} /></View>
           </View>
 
           <View style={styles.body}>
@@ -106,8 +101,8 @@ function ExamCard({ subject, attempts, onPress }) {
 
             <View style={styles.foot}>
               <Text style={styles.best}>{n ? `Best ${best} of ${EXAM_QUESTIONS}` : 'Not taken yet'}</Text>
-              <View style={[styles.go, { backgroundColor: hovered ? tone.solid : tone.soft }]}>
-                <ArrowRight size={20} color={hovered ? Colors.ink : tone.text} strokeWidth={2.6} />
+              <View style={[styles.go, { backgroundColor: hovered ? Colors.surface.hover : Colors.surface.raised }]}>
+                <ArrowRight size={20} color={hovered ? Colors.text.primary : Colors.icon.secondary} strokeWidth={2.6} />
               </View>
             </View>
           </View>
@@ -117,7 +112,6 @@ function ExamCard({ subject, attempts, onPress }) {
   );
 }
 
-const HELLO = { a: 'wave', b: 'cheer', c: 'curious', d: 'tilt' };
 
 function Fact({ Icon, text }) {
   return (
@@ -148,7 +142,6 @@ const styles = StyleSheet.create({
   levelText: { fontFamily: FontFamilies.demi, fontSize: fs(15), color: Colors.text.primary },
   bars: { flexDirection: 'row', alignItems: 'flex-end', gap: 3, height: 16 },
   bar: { width: 6, height: 16, borderRadius: 3, backgroundColor: Colors.border.subtle },
-  mascot: { position: 'absolute', left: 0, right: 0, bottom: 0, alignItems: 'center' },
   body: { padding: Space[28], gap: Space[16] },
   title: { fontFamily: FontFamilies.heavy, fontSize: Platform.select({ web: 'clamp(22px, 0.8vw + 17px, 28px)', default: 24 }), lineHeight: Platform.select({ web: 'clamp(28px, 0.9vw + 21px, 34px)', default: 30 }), color: Colors.text.primary },
   desc: { fontFamily: FontFamilies.medium, fontSize: fs(17), lineHeight: lh(26), color: Colors.text.secondary },

@@ -24,7 +24,8 @@ import Sheet from './Sheet';
 import { ArrowLeft, FileText, Folder, Image, Link, ListFilter, Music, Play, Presentation, Search, X } from './icons';
 import Tile from './Tile';
 
-// One icon and one colour per kind, so a row says what it is before you read it.
+// One icon per kind, all in the same neutral grey: the shape says what it is, and colour is
+// kept for actions and progress.
 const KIND = {
   PDF: { Icon: FileText, accent: 'red', label: 'PDF' },
   Slides: { Icon: Presentation, accent: 'orange', label: 'Slides' },
@@ -51,11 +52,11 @@ const breakAnywhere = Platform.select({ web: { overflowWrap: 'anywhere', wordBre
 export default function UploadsRail({ onStart }) {
   const [kind, setKind] = useState('all');
   const [open, setOpen] = useState(null); // the upload whose details are showing
-  // The same icon and colour as the rows, so the menu and the list read as one thing.
+  // The same icon as the rows, so the menu and the list read as one thing.
   const options = useMemo(() => KIND_FILTERS.map((f) => {
     const k = KIND[f.key];
     if (!k) return f; // "All" is plain text: no icon
-    return { ...f, leading: <k.Icon size={20} strokeWidth={2.2} color={Colors.accent[k.accent].solid} /> };
+    return { ...f, leading: <k.Icon size={20} strokeWidth={2.2} color={Colors.icon.secondary} /> };
   }), []);
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState('');
@@ -145,10 +146,11 @@ function Row({ u, onOpen, onStart }) {
         accessibilityLabel={`${u.name}. ${k.label}. Show details.`}
         style={({ pressed }) => [styles.main, pressed && { opacity: 0.7 }]}
       >
-        <Tile Icon={k.Icon} accent={k.accent} size={40} />
+        <Tile Icon={k.Icon} muted size={40} />
         <View style={styles.text}>
           <MiddleName name={u.name} keepTail={u.kind !== 'Link' && u.kind !== 'Folder'} />
           <Text style={styles.sub} numberOfLines={1}>{subtext(u, k)}</Text>
+          <View style={styles.track}><View style={[styles.fill, { width: `${Math.round(u.progress * 100)}%` }]} /></View>
         </View>
       </Pressable>
       <Pressable
@@ -165,9 +167,10 @@ function Row({ u, onOpen, onStart }) {
 
 // What a row says under the name: what it is, and how far along. A link says where it is from
 // instead (just the site, never the whole address). No file sizes.
-//   "PDF · 40% complete"   "asana.com · 60% complete"   "Slides · Not started"
+//   "PDF · Not started"   "asana.com · 60%"   "Slides · Completed"
+// with a thin bar under it. No exact count of exercises on the row.
 const host = (url) => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return ''; } };
-const progressText = (p) => (p >= 1 ? 'Complete' : p > 0 ? `${Math.round(p * 100)}% complete` : 'Not started');
+const progressText = (p) => (p >= 1 ? 'Completed' : p > 0 ? `${Math.round(p * 100)}%` : 'Not started');
 const subtext = (u, k) => `${u.kind === 'Link' ? host(u.url) || k.label : k.label} · ${progressText(u.progress)}`;
 
 // One line, capped at 28 characters (about 20% fewer than a phone-width row used to show).
@@ -233,7 +236,7 @@ function Details({ item, onClose, onStart }) {
   const info = (
     <>
         <View style={styles.titleRow}>
-          <Tile Icon={k.Icon} accent={k.accent} size={48} />
+          <Tile Icon={k.Icon} muted size={48} />
           {/* The whole name, wrapped, selectable: this is where a long one is read in full. */}
           <Text style={[TITLE, styles.fullName]} selectable>{shown.name}</Text>
         </View>
@@ -250,9 +253,9 @@ function Details({ item, onClose, onStart }) {
         <View style={styles.progress}>
           <View style={styles.progressTop}>
             <Text style={[styles.factLabel, { width: 'auto' }]}>Progress</Text>
-            <Text style={styles.pct}>{pct}%</Text>
+            <Text style={styles.pct}>{progressText(shown.progress)}</Text>
           </View>
-          <ProgressBar currentStep={shown.progress} totalSteps={1} sparkle={false} height={12} fillColor={accent.solid} />
+          <ProgressBar currentStep={shown.progress} totalSteps={1} sparkle={false} height={8} fillColor={Colors.brand.primary} />
           <Text style={SUB}>{resume ? `${done} of ${shown.total} exercises done` : `${shown.total} exercises waiting`}</Text>
         </View>
     </>
@@ -319,6 +322,9 @@ const styles = StyleSheet.create({
   nameRow: { flexDirection: 'row', alignItems: 'baseline' },
   name: { fontFamily: FontFamilies.demi, fontSize: fs(16), lineHeight: lh(22), color: Colors.text.primary },
   sub: { fontFamily: FontFamilies.medium, fontSize: fs(15), lineHeight: lh(20), color: Colors.text.secondary },
+  // A subtle bar: a hairline-thin grey track, blue fill. Empty when not started.
+  track: { height: 4, borderRadius: 2, marginTop: Space[4], backgroundColor: Colors.progress.track, overflow: 'hidden' },
+  fill: { height: 4, borderRadius: 2, backgroundColor: Colors.brand.primary },
   play: { width: 44, height: 44, borderRadius: Radii.control.md, alignItems: 'center', justifyContent: 'center' },
   empty: { paddingHorizontal: Space[16], paddingVertical: Space[24] },
 
