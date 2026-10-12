@@ -56,7 +56,7 @@ export default function GradientCard({ accent = 'blue', glow = true, title, text
           Platform.select({ web: { transitionProperty: 'opacity, transform', transitionDuration: '180ms', transitionTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)' } }),
         ]}
       >
-        <ArrowRight size={22} strokeWidth={2.6} color={Colors.icon.secondary} />
+        <ArrowRight size={22} strokeWidth={2.6} color={c.text} />
       </View>
     </Pressable>
   );

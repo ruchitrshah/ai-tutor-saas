@@ -101,8 +101,8 @@ function ExamCard({ subject, attempts, onPress }) {
 
             <View style={styles.foot}>
               <Text style={styles.best}>{n ? `Best ${best} of ${EXAM_QUESTIONS}` : 'Not taken yet'}</Text>
-              <View style={[styles.go, { backgroundColor: hovered ? Colors.surface.hover : Colors.surface.raised }]}>
-                <ArrowRight size={20} color={hovered ? Colors.text.primary : Colors.icon.secondary} strokeWidth={2.6} />
+              <View style={[styles.go, { backgroundColor: hovered ? tone.solid : tone.soft }]}>
+                <ArrowRight size={20} color={hovered ? Colors.ink : tone.text} strokeWidth={2.6} />
               </View>
             </View>
           </View>
