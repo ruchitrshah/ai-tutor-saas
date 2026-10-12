@@ -61,7 +61,7 @@ function ExamCard({ subject, attempts, onPress }) {
   const hello = (on) => {
     if (!reduced) Animated.timing(lift, { toValue: on ? 1 : 0, duration: on ? 260 : 200, easing: Motion.ease.out, useNativeDriver: Platform.OS !== 'web' }).start();
   };
-  const tone = Colors.accent[meta.tone];
+  const tone = Colors.accent[meta.cardTone || meta.tone];
   const chapters = (SYLLABUS[subject.id] || []).length;
   const n = attempts.length;
   const best = n ? Math.max(...attempts.map((a) => a.score)) : null;
@@ -126,7 +126,7 @@ function Fact({ Icon, text }) {
 function Bars({ level }) {
   return (
     <View style={styles.bars} aria-hidden="true">
-      {[1, 2, 3].map((i) => <View key={i} style={[styles.bar, i <= level && { backgroundColor: Colors.accent.gray.edge }]} />)}
+      {[1, 2, 3].map((i) => <View key={i} style={[styles.bar, i <= level && { backgroundColor: Colors.accent.orange.solid }]} />)}
     </View>
   );
 }

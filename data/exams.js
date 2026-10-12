@@ -211,13 +211,13 @@ export const SYLLABUS = {
 const SLATE = ['#38444D', '#4B5963'];
 export const EXAM_GRADIENT = { a: SLATE, b: SLATE, c: SLATE, d: SLATE };
 
-// How demanding each exam is (1 Warm Up, 2 Stretch, 3 Challenge). Every exam is neutral grey:
-// colour is kept for actions and progress. Brand buttons stay the brand blue.
+// How demanding each exam is (1 Warm Up, 2 Stretch, 3 Challenge). `tone` is the neutral grey
+// used on the exam intro; `cardTone` is each exam's own colour on the Challenge cards.
 export const EXAM_META = {
-  a: { level: 2, tone: 'gray', shape: 'waves' },
-  b: { level: 1, tone: 'gray', shape: 'rings' },
-  c: { level: 2, tone: 'gray', shape: 'steps' },
-  d: { level: 3, tone: 'gray', shape: 'bars' },
+  a: { cardTone: 'purple', level: 2, tone: 'gray', shape: 'waves' },
+  b: { cardTone: 'orange', level: 1, tone: 'gray', shape: 'rings' },
+  c: { cardTone: 'green', level: 2, tone: 'gray', shape: 'steps' },
+  d: { cardTone: 'blue', level: 3, tone: 'gray', shape: 'bars' },
 };
 
 export const EXAM_TYPES = ['Multiple Choice', 'Fill in the Blank', 'Put in Order', 'Match Pairs'];

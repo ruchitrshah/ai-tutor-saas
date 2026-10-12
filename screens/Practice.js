@@ -127,7 +127,7 @@ function LevelBars({ level }) {
   return (
     <View style={styles.bars} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" aria-hidden="true">
       {[1, 2, 3].map((i) => (
-        <View key={i} style={[styles.bar, i <= level && { backgroundColor: Colors.accent.gray.edge }]} />
+        <View key={i} style={[styles.bar, i <= level && { backgroundColor: Colors.accent.orange.solid }]} />
       ))}
     </View>
   );
