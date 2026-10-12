@@ -29,7 +29,7 @@ export default function Button({
   title,
   onPress,
   variant: asked = 'primary',
-  size = 'md', // md: 36 tall, the same height as a chip (default) · lg: 48 tall, for a standalone call to action
+  size = 'lg', // lg: 48 tall (default) · md: 36 tall, the same height as a chip
   disabled = false,
   loading = false,
   haptic = 'light',
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 0,
   },
-  // Sizes. md matches a chip (36); lg is the old full-height button (48).
+  // Sizes. lg is the standard 48 button; md matches a chip (36), opt in with size="md".
   faceMd: { minHeight: 36, paddingVertical: Space[6], paddingHorizontal: Space[16] },
   faceLg: { minHeight: CONTROL, paddingVertical: Space[10], paddingHorizontal: Space[24] },
   outline: { borderWidth: 2 },
