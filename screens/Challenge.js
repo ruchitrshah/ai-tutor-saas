@@ -126,7 +126,7 @@ function Fact({ Icon, text }) {
 function Bars({ level }) {
   return (
     <View style={styles.bars} aria-hidden="true">
-      {[1, 2, 3].map((i) => <View key={i} style={[styles.bar, i <= level && { backgroundColor: Colors.accent.orange.solid }]} />)}
+      {[1, 2, 3].map((i) => <View key={i} style={[styles.bar, i <= level && { backgroundColor: Colors.accent.gray.edge }]} />)}
     </View>
   );
 }
