@@ -11,10 +11,10 @@ import { Colors, Radii, Space } from '../brand';
 import { SUB, TITLE } from '../theme/type';
 import { ArrowRight } from './icons';
 
-export const ACCENTS = ['blue', 'green', 'purple', 'orange', 'yellow'];
+export const ACCENTS = ['gray'];
 
-export default function GradientCard({ accent = 'blue', glow = true, title, text, meta, extra, onPress, style }) {
-  const c = Colors.accent[accent] || Colors.accent.blue;
+export default function GradientCard({ accent = 'gray', glow = true, title, text, meta, extra, onPress, style }) {
+  const c = Colors.accent[accent] || Colors.accent.gray;
   const [hover, setHover] = useState(false);
   const [focus, setFocus] = useState(false);
   const on = (hover || focus) && glow;

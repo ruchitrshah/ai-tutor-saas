@@ -62,6 +62,7 @@ const dark = {
   yellow: { solid: '#FFC800', edge: '#E5B400', text: '#FFC800', soft: rgba('#FFC800', 0.16) },
   orange: { solid: '#FF9600', edge: '#E58700', text: '#FFAB33', soft: rgba('#FF9600', 0.16) },
   purple: { solid: '#CE82FF', edge: '#A568CC', text: '#CE82FF', soft: rgba('#CE82FF', 0.16) },
+  gray: { solid: '#8DA0AB', edge: '#667A86', text: '#B7C4CB', soft: '#2A3B44', line: '#4A5C66' },
 };
 
 const light = {
@@ -85,6 +86,7 @@ const light = {
   yellow: { solid: '#FFC800', edge: '#E5B400', text: '#8A5A00', soft: '#FFF4CC' },
   orange: { solid: '#FF9600', edge: '#E58700', text: '#B55E00', soft: '#FFE8CC' },
   purple: { solid: '#CE82FF', edge: '#A568CC', text: '#8A3FD6', soft: '#F3E5FF' },
+  gray: { solid: '#AFAFAF', edge: '#949494', text: '#6B6B6B', soft: '#F2F2F2', line: '#D4D4D4' },
 };
 
 const T = THEME === 'dark' ? dark : light;
@@ -95,6 +97,7 @@ const accent = freeze({
   blue: A(T.blue),
   green: A(T.green),
   purple: A(T.purple),
+  gray: A(T.gray),
   orange: A(T.orange),
   yellow: A(T.yellow),
   red: A(T.red),

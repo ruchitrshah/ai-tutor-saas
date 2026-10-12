@@ -31,7 +31,7 @@ export default function ExamIntro() {
   const left = (
     <Reveal y={10} duration={320} style={[styles.left, split ? styles.leftSplit : { paddingHorizontal: phone ? Space[20] : Space[40], paddingBottom: 190 }]}>
       <Text style={styles.title}>{subject.name}</Text>
-      <Text style={[styles.facts, { color: accent.text }]}>{EXAM_QUESTIONS} questions · {EXAM_MINUTES} minutes · {tries ? `Attempt ${tries + 1}` : 'First attempt'}</Text>
+      <Text style={styles.facts}>{EXAM_QUESTIONS} questions · {EXAM_MINUTES} minutes · {tries ? `Attempt ${tries + 1}` : 'First attempt'}</Text>
       <Text style={styles.about}>{firstSentence(subject.about)}</Text>
       <Text style={styles.aside}>Anything you miss goes to Revisions.</Text>
     </Reveal>
@@ -103,15 +103,15 @@ const styles = StyleSheet.create({
   paneSplit: { flex: 1 },
   paneStacked: { minHeight: 360 },
   paneScroll: { flex: 1 },
-  colRight: { flex: 1, backgroundColor: Colors.surface.raised },
+  colRight: { flex: 1, backgroundColor: Colors.surface.page, borderLeftWidth: 1, borderLeftColor: Colors.border.hairline },
   colScroll: { flexGrow: 1 },
   stack: { paddingTop: Space[72], paddingBottom: Space[24], gap: Space[24] },
-  rightStacked: { backgroundColor: Colors.surface.raised, paddingVertical: Space[24] },
+  rightStacked: { backgroundColor: Colors.surface.page, borderTopWidth: 1, borderTopColor: Colors.border.hairline, paddingVertical: Space[24] },
 
   left: { gap: Space[12], paddingTop: Space[72], paddingBottom: Space[32] },
   leftSplit: { alignSelf: 'flex-end', width: '100%', maxWidth: 560, paddingHorizontal: Space[48], paddingTop: Space[72] },
   title: { fontFamily: FontFamilies.heavy, fontSize: Platform.select({ web: 'clamp(30px, 2.2vw + 16px, 46px)', default: 32 }), lineHeight: Platform.select({ web: 'clamp(36px, 2.4vw + 20px, 52px)', default: 38 }), letterSpacing: -0.6, color: Colors.text.primary, marginTop: Space[8] },
-  facts: { fontFamily: FontFamilies.demi, fontSize: fs(17), color: Colors.text.accent },
+  facts: { fontFamily: FontFamilies.demi, fontSize: fs(17), color: Colors.text.secondary },
   about: { fontFamily: FontFamilies.medium, fontSize: fs(17), lineHeight: lh(26), color: Colors.text.secondary },
   aside: { fontFamily: FontFamilies.medium, fontSize: fs(16), lineHeight: lh(24), color: Colors.text.muted },
 

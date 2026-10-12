@@ -12,10 +12,10 @@ import { BookOpen, Lightbulb, RotateCcw, ShieldCheck } from '../ui/icons';
 import Sheet from '../ui/Sheet';
 
 const POINTS = [
-  { Icon: Lightbulb, accent: 'yellow', title: 'Learns from mistakes', body: 'It asks questions that help you find the answer.' },
-  { Icon: RotateCcw, accent: 'purple', title: 'Built for revision', body: 'Your mistakes come back as short, focused practice.' },
-  { Icon: BookOpen, accent: 'blue', title: 'Follows your course', body: "It answers only from your professor's material." },
-  { Icon: ShieldCheck, accent: 'green', title: 'You stay in charge', body: 'It never gives answers. Your grades stay in Moodle.' },
+  { Icon: Lightbulb, accent: 'gray', title: 'Learns from mistakes', body: 'It asks questions that help you find the answer.' },
+  { Icon: RotateCcw, accent: 'gray', title: 'Built for revision', body: 'Your mistakes come back as short, focused practice.' },
+  { Icon: BookOpen, accent: 'gray', title: 'Follows your course', body: "It answers only from your professor's material." },
+  { Icon: ShieldCheck, accent: 'gray', title: 'You stay in charge', body: 'It never gives answers. Your grades stay in Moodle.' },
 ];
 
 export function AboutModal() {

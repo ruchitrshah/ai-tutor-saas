@@ -23,19 +23,18 @@ export const taskIcon = (task) => BY_NAME[task.icon] || KIND[task.kind].Icon;
 // The same glyph as raw icon data, for MorphIcon.
 export const taskNode = (task) => data[task.icon || KIND[task.kind].name];
 
-// Identity colour: each subject and each skill has its own, used for its
-// progress fill. Icons are not part of identity; see ui/icons.js for where they go.
+// Identity is neutral grey for every subject and skill; colour is kept for actions and progress. Icons are not part of identity; see ui/icons.js for where they go.
 export const SUBJECT_STYLE = {
-  a: { accent: 'purple' },
-  b: { accent: 'orange' },
-  c: { accent: 'green' },
-  d: { accent: 'blue' },
+  a: { accent: 'gray' },
+  b: { accent: 'gray' },
+  c: { accent: 'gray' },
+  d: { accent: 'gray' },
 };
 
 export const SKILL_STYLE = {
-  coding: { accent: 'blue' },
-  writing: { accent: 'purple' },
-  speaking: { accent: 'orange' },
+  coding: { accent: 'gray' },
+  writing: { accent: 'gray' },
+  speaking: { accent: 'gray' },
 };
 
 export { BookOpen };

@@ -207,23 +207,17 @@ export const SYLLABUS = {
   ],
 };
 
-// Deep, saturated pairs so white text on top always reads (4.5:1 or better).
-export const EXAM_GRADIENT = {
-  a: ['#3E2E94', '#5638AE'],
-  b: ['#8A3C0A', '#A94F0E'],
-  c: ['#14573A', '#1F6F46'],
-  d: ['#163071', '#1F4AA3'],
-};
+// One neutral slate for every exam, so white text on top always reads (4.5:1 or better).
+const SLATE = ['#38444D', '#4B5963'];
+export const EXAM_GRADIENT = { a: SLATE, b: SLATE, c: SLATE, d: SLATE };
 
-// How demanding each exam is (1 Warm Up, 2 Stretch, 3 Challenge) and which character fronts it.
-// The pattern: a subject's colour and its character share a colour (purple with the Bear,
-// orange with the Fox, green with the Frog, blue with the Cactus), so no screen mixes a
-// yellow character into a purple page. Brand buttons stay the brand blue.
+// How demanding each exam is (1 Warm Up, 2 Stretch, 3 Challenge). Every exam is neutral grey:
+// colour is kept for actions and progress. Brand buttons stay the brand blue.
 export const EXAM_META = {
-  a: { level: 2, tone: 'purple', shape: 'waves' },
-  b: { level: 1, tone: 'orange', shape: 'rings' },
-  c: { level: 2, tone: 'green', shape: 'steps' },
-  d: { level: 3, tone: 'blue', shape: 'bars' },
+  a: { level: 2, tone: 'gray', shape: 'waves' },
+  b: { level: 1, tone: 'gray', shape: 'rings' },
+  c: { level: 2, tone: 'gray', shape: 'steps' },
+  d: { level: 3, tone: 'gray', shape: 'bars' },
 };
 
 export const EXAM_TYPES = ['Multiple Choice', 'Fill in the Blank', 'Put in Order', 'Match Pairs'];
